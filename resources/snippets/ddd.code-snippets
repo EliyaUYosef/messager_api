@@ -1,0 +1,13 @@
+{
+    "uuid": "00000000-0000-0000-0000-000000000000",
+    "scope": "source.php",
+    "prefix": "ddd",
+    "body": "die('<pre>'.print_r([$REPLACE_IT,[
+          'class'=>__CLASS__,
+          'file'=>__FILE__,
+          'line'=>__LINE__,
+          'function'=>__FUNCTION__,
+          'namespace'=>__NAMESPACE__
+      ]],true).'</pre>');\n"
+  }
+  
