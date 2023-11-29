@@ -21,13 +21,13 @@ use App\Http\Controllers\Api\ApiController;
 Route::get('check',fn() => phpinfo());
 // Open Routes
 // - - - - - - - - - - - - - - - - - -
-Route::post("register", [ApiController::class,'register']);
-Route::post("login", [ApiController::class,'login']);
 
+Route::post("login", [ApiController::class,'login']);
+Route::post("register", [ApiController::class,'register']);
 
 // Protected Routes
 Route::group([
-   "middleware" => ["auth:api"]
+   "middleware" => ["auth:api", "update_user_last_action"]
 ],function(){
    // GET Method
    Route::get("profile", [ApiController::class,'profile']);

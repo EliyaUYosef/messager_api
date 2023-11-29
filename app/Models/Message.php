@@ -20,12 +20,17 @@ class Message extends Model
         'recived_time',
     ];
 
-    public static $vlidations_roles = [
-        "sender" => "required",
-        "reciver" => "required",
-        "message" => "required|string",
-        "subject" => "required|string",
+    public static $validations_rules = [
+        "sender" => "required|integer|min:1",
+        "reciver" => "required|integer",
+        "message" => "required|string|max:20000",
+        "subject" => "required|string|max:255|min:3",
     ];
 
-    
+    public function sender() {
+        return $this->belongsTo(User::class,"sender",'id');
+    }    
+    public function reciver() {
+        return $this->belongsTo(User::class,"reciver",'id');
+    }    
 }

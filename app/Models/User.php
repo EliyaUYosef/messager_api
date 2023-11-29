@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'last_action_time'
     ];
 
     /**
@@ -43,9 +44,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public static $validations_roles = [
-        "name" => "required",
-        "email" => "required|email|unique:users",
-        "password" => "required|confirmed"
+    public static $register_rules = [
+        "name" => "required|string|max:255|min:2",
+        "email" => "required|email|unique:users|max:255|min:6",
+        "password" => "required|string|confirmed|min:8|max:50"
     ];
+    public static $login_rules = [
+        "email" => "required|email|unique:users|max:255|min:6",
+        "password" => "required|string|confirmed|min:8|max:50"
+    ];
+
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver');
+    }
 }
