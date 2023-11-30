@@ -17,14 +17,17 @@ class Message extends Model
         'reciver',
         'message',
         'subject',
-        'recived_time',
+        'recieved_flag',
     ];
 
     public static $validations_rules = [
-        "sender" => "required|integer|min:1",
+        // "sender" => "required|integer|min:1", // we get this from passport
         "reciver" => "required|integer",
         "message" => "required|string|max:20000",
         "subject" => "required|string|max:255|min:3",
+    ];
+    public static $validations_rules_for_delete = [
+        "message_id" => "required|integer",
     ];
 
     public function sender() {

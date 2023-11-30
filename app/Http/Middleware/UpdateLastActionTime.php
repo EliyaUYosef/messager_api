@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\UserController;
 use App\Models\User;
+use App\Services\UserService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +18,9 @@ class UpdateLastActionTime
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $userController = new UserController();
+        $userController = new UserService();
         $userController->update_last_action_time();
-        
+
         return $next($request);
     }
 

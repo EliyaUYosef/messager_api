@@ -6,30 +6,61 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\MessageService;
 use App\Services\UserService;
-use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App;
 
+/**
+ * Main Api Controller - Http Terminal Requests
+ */
 class ApiController extends Controller
 {
-    protected $userController;
-    protected $messageController;
+    /**
+     * User Action Center Service Link
+     *
+     * @var UserService $userService 
+     */
+    protected UserService $userService;
+
+    /**
+     * Message Action Center Service Link
+     *
+     * @var MessageService $messageService
+     */
+    protected MessageService $messageService;
+
+    /**
+     * Class Construct -  Make Services Run
+     */
     public function __construct()
     {
-        App::make(MessageService::class);
-        App::make(UserService::class);
+        // create as singletone - initial only once for the entire app
+        $this->userService = app()->make(UserService::class);
+        $this->messageService = app()->make(MessageService::class);
     }
-    // Register Api (POST)
+
+    
+    /**
+     * Register Api
+     * Method : POST
+     *
+     * @auth User
+     * @param Request $request [
+     *                          string name,
+     *                          string email,
+     *                          string password,
+     *                          string password_confirmation
+     * ]
+     * @return Response (HTTP-JSON)
+     */
     public function register(Request $request)
     {
         // Data validation
-        $request->validate(User::$register_rules); // Return HTTP status code 422 on error
-        
+        $request->validate(User::$register_form_rules); // Return HTTP status code 422 on error
+
         // Author model
-        $this->userController->create_user([
+        $this->userService->create_user([
             "name" => $request->name,
             "email" => $request->email,
             "password" => Hash::make($request->password)
@@ -42,24 +73,29 @@ class ApiController extends Controller
         ]);
     }
 
-    // Login Api (POST)
+    /**
+     * Login Api 
+     * Method : POST
+     *
+     * @auth User
+     * @param Request $request [
+     *                          string email,
+     *                          string password,
+     * ]
+     * @return Response (HTTP-JSON)
+     */
     public function login(Request $request)
     {
         // Data validation
-        $request->validate(User::$login_rules);
+        $request->validate($this->userService->get_login_validations_rule());
 
         // Auth Facade
         if (Auth::attempt([
             "email" => $request->email,
             "password" => $request->password
         ])) {
-            
-            
-            $this->userController->update_last_action_time();
-            
-            $user = Auth::user();
-            
-            $token = $user->createToken("myToken")->accessToken;
+
+            $token = $this->userService->update_last_action_time();
 
             return response()->json([
                 "status" => true,
@@ -74,19 +110,37 @@ class ApiController extends Controller
         ]);
     }
 
-    // Profile Api (GET)
+    /**
+     * Profile Api
+     * 
+     * get all user fields datafrom db
+     * 
+     * Method : GET
+     * 
+     * @auth User
+     * @param []
+     * @return Response (HTTP-JSON) 
+     */
     public function profile()
     {
         $userdata = Auth::user();
 
         return response()->json([
             "status" => true,
-            "message" => "Profile data",
+            "message" => "User profile data",
             "data" => $userdata
         ]);
     }
 
-    // Logout Api (GET)
+    /**
+     * Logout Api
+     *
+     * Method : GET
+     * 
+     * @auth User
+     * @param []
+     * @return Response (HTTP-JSON)
+     */
     public function logout()
     {
         auth()->user()->token()->revoke();
@@ -101,24 +155,33 @@ class ApiController extends Controller
     // Write Message API (POST)
     public function write_message(Request $request)
     {
-        $user = $this->userController
-                    ->get_user_by_id($request->reciver);
-        
+        if (!Auth::check()) {
+            return response()->json([
+                "status" => false,
+                "message" => "You must be logged in to send a message."
+            ]);
+        }
+
+        $sender = Auth::user();
+        $reciver_user = $this->userService
+            ->get_user_by_id($request->reciver);
+
         $request->validate(
-            $this->messageController
+            $this->messageService
                 ->get_message_validations_rules()
         );
-        
-        if (!$user) {
+
+
+        if (!$reciver_user) {
             return response()->json([
                 "status" => false,
                 "message" => "Message reciver is not recognized."
             ]);
         }
-        
-        
-        $message = $this->messageController->create_message([
-            'sender' => $request['id'],
+
+
+        $message = $this->messageService->create_message([
+            'sender' =>  $sender->id,
             'reciver' => $request->reciver,
             'subject' => $request->subject,
             'message' => $request->message,
@@ -131,12 +194,11 @@ class ApiController extends Controller
                 "message" => "Failed to create the message"
             ]);
         }
-        
+
         return response()->json([
             "status" => true,
             "message" => "Message created"
         ]);
-        
     }
 
 
@@ -144,13 +206,29 @@ class ApiController extends Controller
     public function get_all_unread_messages()
     {
         $userdata = Auth::user();
-        $messages = $this->messageController
-                        ->get_unread_messages_by_user_id($userdata['id']);
-            
-        
+        $messages = $this->messageService
+            ->get_unread_messages_by_user_id($userdata['id']) ?? [];
+
         return response()->json([
             "status" => true,
-            "data" => $messages ?? [],
+            "data_length" => count($messages),
+            "data" => $messages,
+            "message" => "This the all messages"
+        ]);
+    }
+    
+    // Get All Messages From All - API (GET)
+    public function get_messages_from_all()
+    {
+        Auth::check();
+        $user = Auth::user();
+        $messages = $this->messageService
+            ->get_messages_for_user($user['id']) ?? [];
+
+        return response()->json([
+            "status" => true,
+            "data_length" => count($messages),
+            "data" => $messages,
             "message" => "This the all messages"
         ]);
     }
@@ -163,9 +241,9 @@ class ApiController extends Controller
         $request->validate([
             'message_id' => "required|integer"
         ]);
-        
-        $message_exist_result = $this->messageController
-                            ->check_if_message_exist($request->id,'reciver', $userdata['id']);
+
+        $message_exist_result = $this->messageService
+            ->check_if_message_exist($request->id);
 
         if (!$message_exist_result) {
             return response()->json([
@@ -173,12 +251,12 @@ class ApiController extends Controller
                 "message" => "Message not found"
             ]);
         }
-        
-        $update_status = $this->messageController
-                            ->mark_as_read($request->message_id);
 
-        $message = $this->messageController
-                            ->get_message_by_id($request->message_id);
+        $update_status = $this->messageService
+            ->mark_as_read($request->message_id);
+
+        $message = $this->messageService
+            ->get_message_by_id($request->message_id);
 
         if ($update_status && $message) {
             return response()->json([
@@ -198,13 +276,12 @@ class ApiController extends Controller
     // Delete Message - By 'id<Integer>' API (POST)
     public function delete_message(Request $request)
     {
-        $request->validate([
-            'message_id' => "required"
-        ]);
-        
+        $request->validate($this->messageService
+                ->get_delete_message_req_validations());
+
         // check if message is exist and link to this user
-        $update_status = $this->messageController
-                            ->delete_message_by_id($request->message_id);
+        $update_status = $this->messageService
+            ->delete_message_by_id($request->message_id);
 
         if ($update_status) {
             return response()->json([
@@ -215,7 +292,7 @@ class ApiController extends Controller
 
         return response()->json([
             "status" => false,
-            "message" => "Delete is failed"
+            "message" => "Delete is failed."
         ]);
     }
 }

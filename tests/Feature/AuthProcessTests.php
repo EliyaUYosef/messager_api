@@ -3,24 +3,29 @@
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class AuthProcessTests extends TestCase
 {
+    use DatabaseTransactions;
     /**
      * A basic test example.
+     * @test
      */
-    public function register_test(): void
+    public function test_register_test(): void
     {
         $register_form_fields = [
             'name' => "Eliya Yosef",
-            'email' => "Eliya@example.com",
-            "password" => "123456",
-            "password_confirmation" => "123456"
+            'email' => "Eliya1@example.com",
+            "password" => "12345678",
+            "password_confirmation" => "12345678"
         ];
         
         $response = $this->post('/api/register',$register_form_fields);
-        dd($response);
         $response->assertStatus(200);
+
+        $this->assertEquals('User created successfully', $response->getData()->message);
     }
 }

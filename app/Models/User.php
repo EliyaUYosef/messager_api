@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -40,27 +41,36 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        // 'email_verified_at' => 'datetime',
     ];
 
-    public static $register_rules = [
+    public static $register_form_rules = [
         "name" => "required|string|max:255|min:2",
         "email" => "required|email|unique:users|max:255|min:6",
         "password" => "required|string|confirmed|min:8|max:50"
     ];
-    public static $login_rules = [
-        "email" => "required|email|unique:users|max:255|min:6",
-        "password" => "required|string|confirmed|min:8|max:50"
+
+    /**
+     * variable
+     *
+     * @var array $login_rules
+     * 
+     * desc:  validation rules for field are 
+     *        exist on login form.
+     */
+    public static $login_form_rules = [
+        "email" => "required|email|max:255|min:6",
+        "password" => "required|string|min:8|max:50"
     ];
 
-    public function sentMessages()
+    public function sentMessages(): HasMany
     {
         return $this->hasMany(Message::class, 'sender');
     }
 
-    public function receivedMessages()
+    public function receivedMessages(): HasMany
     {
-        return $this->hasMany(Message::class, 'receiver');
+        return $this->hasMany(Message::class, 'reciver');
     }
 }
