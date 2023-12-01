@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Services\MessageService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class ApiController extends Controller
 {
-    /**
+    /**     
      * User Action Center Service Link
      *
      * @var UserService $userService 
@@ -40,54 +39,59 @@ class ApiController extends Controller
         $this->messageService = app()->make(MessageService::class);
     }
 
-    
+
     /**
      * Register Api
      * Method : POST
-     *
+     * Path : api/auth/register
+     * 
      * @auth User
-     * @param Request $request [
-     *                          string name,
-     *                          string email,
-     *                          string password,
-     *                          string password_confirmation
-     * ]
+     * @param Request $request (name, email, password, password_confirmation)
      * @return Response (HTTP-JSON)
      */
-    public function register(Request $request)
+    public function register(Request $request) : \Illuminate\Http\JsonResponse
     {
         // Data validation
-        $request->validate(User::$register_form_rules); // Return HTTP status code 422 on error
+        $request->validate(
+            $this->userService->register_validations_rule()
+        ); // Return HTTP status code 422 on failure
 
         // Author model
-        $this->userService->create_user([
+        $new_user = $this->userService->create_user([
             "name" => $request->name,
             "email" => $request->email,
             "password" => Hash::make($request->password)
         ]);
 
+        // Check user creation result
+        if (!$new_user) {
+            return response()->json([
+                "message" => "User creation is failed."
+            ])->setStatusCode(500);
+        }
+
         // Response
         return response()->json([
-            "status" => true,
-            "message" => "User created successfully"
-        ]);
+            "message" => "User created successfully.",
+            "data" => ["user" => $new_user]
+        ])->setStatusCode(201);
     }
 
     /**
      * Login Api 
      * Method : POST
+     * Path : api/auth/login
      *
      * @auth User
-     * @param Request $request [
-     *                          string email,
-     *                          string password,
-     * ]
+     * @param Request $request (email, password)
      * @return Response (HTTP-JSON)
      */
-    public function login(Request $request)
+    public function login(Request $request) : \Illuminate\Http\JsonResponse
     {
         // Data validation
-        $request->validate($this->userService->get_login_validations_rule());
+        $request->validate(
+            $this->userService->login_validations_rules()
+        ); // Return HTTP status code 422 on error
 
         // Auth Facade
         if (Auth::attempt([
@@ -95,161 +99,299 @@ class ApiController extends Controller
             "password" => $request->password
         ])) {
 
-            $token = $this->userService->update_last_action_time();
+            $token = $this->userService->generate_token();
+            $this->userService->update_last_action_time();
+            $new_user = Auth::user();
 
             return response()->json([
-                "status" => true,
-                "message" => "Login successful",
-                "access_token" => $token
-            ]);
+                "message" => "Login successful.",
+                "data" => [
+                    "access_token" => $token,
+                    "user" => $new_user
+                ]
+            ])->setStatusCode(200);
         }
 
         return response()->json([
-            "status" => false,
-            "message" => "Invalid credentials"
-        ]);
+            "message" => "Invalid credentials."
+        ])->setStatusCode(401);
     }
 
     /**
      * Profile Api
+     * Method : GET ()
+     * Path : api/auth/profile
      * 
-     * get all user fields datafrom db
+     * Desc : get all user info data from db
      * 
-     * Method : GET
      * 
      * @auth User
      * @param []
      * @return Response (HTTP-JSON) 
      */
-    public function profile()
+    public function profile() : \Illuminate\Http\JsonResponse
     {
-        $userdata = Auth::user();
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to get user info."
+            ])->setStatusCode(401);
+        }
 
+        // Get user data
+        $user_data = Auth::user();
+
+        // Response
         return response()->json([
-            "status" => true,
-            "message" => "User profile data",
-            "data" => $userdata
-        ]);
+            "message" => "User profile data.",
+            "data" => $user_data
+        ])->setStatusCode(200);
     }
 
     /**
      * Logout Api
-     *
-     * Method : GET
+     * Method : GET ()
+     * Path : a[i/auth/logout
+     * 
      * 
      * @auth User
      * @param []
      * @return Response (HTTP-JSON)
      */
-    public function logout()
+    public function logout() : \Illuminate\Http\JsonResponse
     {
-        auth()->user()->token()->revoke();
-
-        return response()->json([
-            "status" => true,
-            "message" => "User logged out"
-        ]);
-    }
-
-
-    // Write Message API (POST)
-    public function write_message(Request $request)
-    {
+        // Authentication check
         if (!Auth::check()) {
             return response()->json([
-                "status" => false,
-                "message" => "You must be logged in to send a message."
-            ]);
+                "message" => "You must be logged in to get user info."
+            ])->setStatusCode(401);
         }
 
+        Auth::user()->token()->revoke();
+
+        return response()->json([
+            "message" => "User logged out."
+        ])->setStatusCode(200);
+    }
+
+    /**
+     * Insert New Message
+     * Method : POST
+     * Path : api/msg/insert_new_message
+     * 
+     * Desc : add new message to db.
+     *        the connectng user is the writer
+     *
+     * @auth User
+     * @param Request $request (reciver, message, subject)
+     * @return Response (HTTP_JSON)
+     */
+    public function insert_new_message(Request $request) : \Illuminate\Http\JsonResponse
+    {
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to send a message."
+            ])->setStatusCode(401);
+        }
         $sender = Auth::user();
+
+        // Data validation
+        $request->validate(
+            $this->messageService
+                ->message_validations_rules()
+        );
+
         $reciver_user = $this->userService
             ->get_user_by_id($request->reciver);
 
-        $request->validate(
-            $this->messageService
-                ->get_message_validations_rules()
-        );
-
-
         if (!$reciver_user) {
             return response()->json([
-                "status" => false,
                 "message" => "Message reciver is not recognized."
-            ]);
+            ])->setStatusCode(404);
         }
 
-
-        $message = $this->messageService->create_message([
+        $message_creation_result = $this->messageService->create_message([
             'sender' =>  $sender->id,
             'reciver' => $request->reciver,
             'subject' => $request->subject,
             'message' => $request->message,
         ]);
 
-        if (!$message) {
-            // Handle the case where message creation fails
+        if ($message_creation_result) {
             return response()->json([
-                "status" => false,
-                "message" => "Failed to create the message"
-            ]);
+                "data" => [
+                    "message" => $message_creation_result,
+                    "reciver_info" => $reciver_user
+                ],
+                "message" => "Message created."
+            ])->setStatusCode(201);
+        }
+
+        // Handle the case where message creation fails
+        return response()->json([
+            "message" => "Failed to create the message."
+        ])->setStatusCode(500);
+    }
+
+    /**
+     * Get Chat With
+     * Metthod : GET
+     * Path : api/msg/get_chat_with
+     * 
+     * Desc : get all messages from specific user
+     *
+     * @auth User
+     * @param Request $request ( reciver - user_id )
+     * @return Response (HTTP_JSON)
+     */
+    public function get_chat_with(Request $request) : \Illuminate\Http\JsonResponse
+    {
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to get messages."
+            ])->setStatusCode(401);
+        }
+        $user = Auth::user();
+
+        // Data validation
+        $request->validate($this->userService->user_id_validations()); // return 422 on error
+
+        // Fetch the user with whom the chat is happening
+        $chat_with_user = $this->userService->get_user_by_id($request->user_id);
+        if (!$chat_with_user) {
+            return response()->json([
+                "message" => "Chat partner not found"
+            ])->setStatusCode(404);
+        }
+
+        $chat_messages = $this->messageService
+            ->get_messages_from_specific_user($user['id'], $request->user_id) ?? [];
+
+        $count_messages = count($chat_messages);
+
+        if ($count_messages > 0) {
+            return response()->json([
+                "data" => [
+                    "messages" => $chat_messages,
+                    "messages_count" => $count_messages,
+                    "chat_with" => $chat_with_user
+                ],
+                "message" => "This the all messages."
+            ])->setStatusCode(200);
         }
 
         return response()->json([
-            "status" => true,
-            "message" => "Message created"
-        ]);
+            "data" => [
+                "messages" => $chat_messages,
+                "messages_count" => $count_messages,
+            ],
+            "message" => "No messages found with the specific user."
+        ])->setStatusCode(204);
     }
 
-
-    // Get All Unread Messages - API (GET)
-    public function get_all_unread_messages()
+    /**
+     * Get Unread Messages From
+     * Metthod : GET
+     * Path : api/msg/get_unread_messages_from
+     * 
+     * Desc : get unread messages from specific user
+     * 
+     * @auth User
+     * @param Request $request ( reciver - user_id )
+     * @return Response (HTTP_JSON)
+     */
+    public function get_unread_messages_from(Request $request) : \Illuminate\Http\JsonResponse
     {
-        $userdata = Auth::user();
-        $messages = $this->messageService
-            ->get_unread_messages_by_user_id($userdata['id']) ?? [];
-
-        return response()->json([
-            "status" => true,
-            "data_length" => count($messages),
-            "data" => $messages,
-            "message" => "This the all messages"
-        ]);
-    }
-    
-    // Get All Messages From All - API (GET)
-    public function get_messages_from_all()
-    {
-        Auth::check();
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to get messages."
+            ])->setStatusCode(401);
+        }
         $user = Auth::user();
-        $messages = $this->messageService
-            ->get_messages_for_user($user['id']) ?? [];
+
+        // Data validation
+        $request->validate($this->userService->user_id_validations()); // Return status 422 on error
+
+        // Fetch the user with whom the chat is happening
+        $chat_with_user = $this->userService->get_user_by_id($request->user_id);
+        if (!$chat_with_user) {
+            return response()->json([
+                "message" => "Chat partner not found"
+            ])->setStatusCode(404);
+        }
+
+        // Search for messages
+        $messages_result = $this->messageService
+            ->get_unread_messages_from_specific_user($user['id'], $request->user_id) ?? [];
+
+        $count_messages = count($messages_result);
+
+        if ($count_messages > 0) {
+            return response()->json([
+                "data" => [
+                    "messages" => $messages_result,
+                    "messages_count" => $count_messages,
+                    "chat_with"=>$chat_with_user,
+                ],
+                "message" => "This the all messages."
+            ])->setStatusCode(200);
+        }
 
         return response()->json([
-            "status" => true,
-            "data_length" => count($messages),
-            "data" => $messages,
-            "message" => "This the all messages"
-        ]);
+            "data" => [
+                "messages" => $messages_result,
+                "messages_count" => $count_messages
+            ],
+            "message" => "No unread messages found with the specific user."
+        ])->setStatusCode(204);
     }
 
-
-    // Read Message - By 'id<Integer>' API (POST)
-    public function read_message(Request $request)
+    /**
+     * Update Message As (Already) Read
+     * Metthod : POST
+     * Path : api/msg/update_message_as_read
+     *
+     * Desc : update Message read flag to true by id
+     * 
+     * @auth User
+     * @param Request $request (message_id)
+     * @return Response (HTTP_JSON)
+     */
+    public function update_message_as_read(Request $request) : \Illuminate\Http\JsonResponse
     {
-        $userdata = Auth::user();
-        $request->validate([
-            'message_id' => "required|integer"
-        ]);
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to update message status."
+            ])->setStatusCode(401);
+        }
+        $user = Auth::user();
+
+        // Data validation
+        $request->validate(
+            $this->messageService->message_id_validations()
+        );
 
         $message_exist_result = $this->messageService
-            ->check_if_message_exist($request->id);
+            ->check_if_message_exist($request->message_id);
 
         if (!$message_exist_result) {
             return response()->json([
-                "status" => false,
-                "message" => "Message not found"
-            ]);
+                "message" => "Message not found."
+            ])->setStatusCode(404);
+        }
+
+        // Check if the receiver exists
+        $receiver_exist_result = $this->messageService
+            ->check_if_receiver_exist($request->message_id, $user->id);
+
+        if (!$receiver_exist_result) {
+            return response()->json([
+                "message" => "Receiver not found."
+            ])->setStatusCode(404);
         }
 
         $update_status = $this->messageService
@@ -260,39 +402,74 @@ class ApiController extends Controller
 
         if ($update_status && $message) {
             return response()->json([
-                "status" => true,
-                "data" => $message,
-                "message" => "This message is already showed to user"
-            ]);
+                "data" => [
+                    "message" => $message
+                ],
+                "message" => "This message has been marked as read."
+            ])->setStatusCode(200);
         }
 
         return response()->json([
-            "status" => false,
-            "message" => "Update is failed"
-        ]);
+            "message" => "Failed to mark the message as read."
+        ])->setStatusCode(500);
     }
 
-
-    // Delete Message - By 'id<Integer>' API (POST)
-    public function delete_message(Request $request)
+    /**
+     * Delete Message
+     * Metthod : POST
+     * Path : api/msg/delete_message
+     * 
+     * Desc : remove message from db by id
+     *
+     * @auth User
+     * @param Request $request (message_id)
+     * @return Response (HTTP_JSON)
+     */
+    public function delete_message(Request $request) : \Illuminate\Http\JsonResponse
     {
-        $request->validate($this->messageService
-                ->get_delete_message_req_validations());
-
-        // check if message is exist and link to this user
-        $update_status = $this->messageService
-            ->delete_message_by_id($request->message_id);
-
-        if ($update_status) {
+        // Authentication check
+        if (!Auth::check()) {
             return response()->json([
-                "status" => true,
-                "message" => "This message already deleted."
-            ]);
+                "message" => "You must be logged in to delete a message."
+            ])->setStatusCode(401);
+        }
+        $user = Auth::user();
+
+        // Data validation
+        $request->validate($this->messageService
+            ->message_id_validations());
+
+        $message_to_delete = $this->messageService
+            ->get_message_by_id($request->message_id);
+
+        if (
+            !$message_to_delete ||
+            ($message_to_delete->sender !== $user->id &&
+                $message_to_delete->receiver !== $user->id)
+        ) {
+            return response()->json([
+                "message" => "Message not found or you don't have permission to delete it.",
+            ])->setStatusCode(404);
         }
 
-        return response()->json([
-            "status" => false,
-            "message" => "Delete is failed."
-        ]);
+        $delete_status = $this->messageService
+            ->delete_message_by_id($request->message_id);
+
+        if ($delete_status) {
+            return response()->json([
+                "message" => "The message has been successfully deleted."
+            ])->setStatusCode(200);
+        }
+
+        $message_exist = $this->messageService->check_if_message_exist($request->message_id);
+        if (!$message_exist) {
+            return response()->json([
+                "message" => "Message not found.",
+            ])->setStatusCode(404);
+        } else {
+            return response()->json([
+                "message" => "Failed to delete the message.",
+            ])->setStatusCode(500);
+        }
     }
 }

@@ -8,7 +8,7 @@ use App\Models\User; // Assuming User model is in the same namespace
 
 class MessageSeeder extends Seeder
 {
-    public function run()
+    public function run() : void
     {
         // Create a single message
         Message::create([

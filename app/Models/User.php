@@ -33,6 +33,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
     ];
 
     /**
@@ -42,13 +43,12 @@ class User extends Authenticatable
      */
     protected $casts = [
         'password' => 'hashed',
-        // 'email_verified_at' => 'datetime',
     ];
 
     public static $register_form_rules = [
         "name" => "required|string|max:255|min:2",
         "email" => "required|email|unique:users|max:255|min:6",
-        "password" => "required|string|confirmed|min:8|max:50"
+        "password" => "required|string|confirmed|min:8|max:50|regex:/[^\d]/"
     ];
 
     /**
@@ -62,6 +62,10 @@ class User extends Authenticatable
     public static $login_form_rules = [
         "email" => "required|email|max:255|min:6",
         "password" => "required|string|min:8|max:50"
+    ];
+
+    public static $validations_id_rules = [
+        "user_id" => "required|integer|min:1",
     ];
 
     public function sentMessages(): HasMany

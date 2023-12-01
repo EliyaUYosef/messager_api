@@ -4,56 +4,141 @@ namespace App\Services;
 
 use App\Models\Message;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
-class MessageService 
+class MessageService
 {
-    public function check_if_message_exist($message_id): bool 
+    
+    /**
+     * Return bool if message exist in DB
+     *
+     * @param integer $message_id
+     * @return boolean
+     */
+    public function check_if_message_exist(int $message_id): bool
     {
         $message = Message::find($message_id);
-        
+
         return !empty($message);
     }
 
-    public function create_message($message_object) {
-        return Message::create($message_object);
+    /**
+     * Insert new message to DB
+     *
+     * @param array $message
+     * @return Message
+     */
+    public function create_message(array $message) : Message
+    {
+        return Message::create($message);
     }
-    public function get_unread_messages_by_user_id($user_id) {
-        return Message::where('reciver', $user_id)
-            ->where('recieved_flag', NULL)
-            ->orderBy('id', 'DESC')
-            ->get();
 
-        // return User::find($user_id)
-        //                  ->receivedMessages()
-        //                  ->where('recieved_flag', null)
-        //                  ->orderBy('id', 'DESC')
-        //                  ->get();
+    /**
+     * Get chat messages
+     *
+     * @param integer $user_id
+     * @param integer $reciver_id
+     * @return array
+     */
+    public function get_messages_from_specific_user(int $user_id,int $reciver_id) : array
+    {
+        return User::find($user_id)
+                    ->sentMessages()
+                    ->where('reciver', $reciver_id)
+                    ->orWhere(function ($query) use ($user_id, $reciver_id) {
+                        $query->where('sender', $reciver_id)->where('reciver', $user_id);
+                    })
+                    ->orderBy('id', 'ASC')
+                    ->get();
     }
-    public function get_messages_for_user() {
-        $user = Auth::user();
-        // return Message::where('reciver', $user->id)
-        //             ->orderBy('id', 'DESC')
-        //             ->get();
 
-        return User::find( $user->id)
-                         ->receivedMessages()
-                         ->orderBy('id', 'DESC')
-                         ->get();
+    /**
+     * Get unread messages for chat
+     *
+     * @param integer $user_id
+     * @param integer $reciver_id
+     * @return array
+     */
+    public function get_unread_messages_from_specific_user(int $user_id,int $reciver_id) : array
+    {
+        return Message::where(function ($query) use ($user_id, $reciver_id) {
+                        $query->where('sender', $user_id)->where('reciver', $reciver_id);
+                    })->orWhere(function ($query) use ($user_id, $reciver_id) {
+                        $query->where('sender', $reciver_id)->where('reciver', $user_id);
+                    })
+                    ->where('recieved_flag', 0)
+                    ->orderBy('id', 'ASC')
+                    ->get(); 
     }
-    public function delete_message_by_id($message_id) {
-        return Message::where('id', $message_id)->delete();
+
+    /**
+     * Remove message from DB
+     *
+     * @param integer $message_id
+     * @return integer
+     */
+    public function delete_message_by_id(int $message_id) : int
+    {
+        return Message::where('id', $message_id)
+                    ->delete();
     }
-    public function mark_as_read($message_id) {
-        return Message::where('id', $message_id)->update(['recieved_flag' => now()]);;
+
+    /**
+     * Update message row as already read
+     *
+     * @param integer $message_id
+     * @return boolean
+     */ 
+    public function mark_as_read(int $message_id) : bool
+    {
+        return Message::where('id', $message_id)
+                    ->update(['recieved_flag' => now()]);;
     }
-    public function get_message_by_id($message_id) {
+
+    /**
+     * Find specific message by id
+     *
+     * @param integer $message_id
+     * @return Message
+     */
+    public function get_message_by_id(int $message_id) : Message
+    {
         return Message::find($message_id);
     }
-    public function get_message_validations_rules() {
+
+    /**
+     * Check if the specified user (receiver) 
+     *  exists in the recipients of a message.
+     *
+     * @param integer $message_id
+     * @param integer $user_id
+     * @return boolean
+     */
+    public function check_if_receiver_exist(int $message_id, int $user_id) : bool 
+    {
+        return User::find($user_id)->receivedMessages()
+                    ->where('id',$message_id)
+                    ->exist();
+    }
+
+    // Validations rules functions - - - - - - - - - - -
+
+    /**
+     * Return validations rules array for create message
+     *
+     * @return array
+     */
+    public function message_validations_rules() : array
+    {
         return Message::$validations_rules;
     }
-    public function get_delete_message_req_validations() {
-        return Message::$validations_rules_for_delete;
+    
+    /**
+     * Return validations rules array for message_id req
+     *
+     * @return array
+     */
+    public function message_id_validations() : array
+    {
+        return Message::$validations_id_rules;
     }
 }

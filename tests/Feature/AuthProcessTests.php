@@ -28,4 +28,17 @@ class AuthProcessTests extends TestCase
 
         $this->assertEquals('User created successfully', $response->getData()->message);
     }
+    
+    public function test_login_test(): void
+    {
+        $login_form_fields = [
+            'email' => "tuna@example.com",
+            "password" => "12345678",
+        ];
+        
+        $response = $this->post('/api/login',$login_form_fields);
+        $response->assertStatus(200);
+
+        $this->assertEquals('Login successful.', $response->getData()->message);
+    }
 }

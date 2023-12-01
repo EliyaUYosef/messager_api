@@ -18,26 +18,42 @@ use App\Http\Controllers\Api\ApiController;
 
 
 
-Route::get('check',fn() => phpinfo());
+Route::get('test',fn() => phpinfo());
+
 // Open Routes
-// - - - - - - - - - - - - - - - - - -
+Route::post("auth/login", 
+      [ApiController::class,'login']);
 
-Route::post("auth/login", [ApiController::class,'login']);
-Route::post("auth/register", [ApiController::class,'register']);
+Route::post("auth/register", 
+      [ApiController::class,'register']);
 
-// Protected Routes
+
+// Protected Group Routes
 Route::group([
    "middleware" => ["auth:api", "update_user_last_action"]
 ],function(){
-   // GET Method
-   Route::get("auth/profile", [ApiController::class,'profile']);
-   Route::get("auth/logout", [ApiController::class,'logout']);
-  
-   
+   Route::get("auth/profile", 
+         [ApiController::class,'profile']);
 
-   Route::post("msg/write_message", [ApiController::class,'write_message']);
-   Route::get("msg/get_messages_from_all", [ApiController::class,'get_messages_from_all']);
-   Route::get("msg/get_all_unread_messages", [ApiController::class,'get_all_unread_messages']);  
-   Route::post("msg/read_message", [ApiController::class,'read_message']);
-   Route::post("msg/delete_message", [ApiController::class,'delete_message']);
+   Route::get("auth/logout", 
+         [ApiController::class,'logout']);
+  
+   Route::post("msg/insert_new_message", 
+         [ApiController::class,'insert_new_message']);
+
+   Route::post("msg/update_message_as_read", 
+         [ApiController::class,'update_message_as_read']);
+
+   Route::post("msg/delete_message", 
+         [ApiController::class,'delete_message']);
+
+         
+// -----------------------------------
+
+   Route::get("msg/get_chat_with", 
+         [ApiController::class,'get_chat_with']);
+
+   Route::get("msg/get_unread_messages_from", 
+         [ApiController::class,'get_unread_messages_from']);
+
 });
