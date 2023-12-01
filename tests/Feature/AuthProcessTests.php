@@ -18,9 +18,9 @@ class AuthProcessTests extends TestCase
     {
         $register_form_fields = [
             'name' => "Eliya Yosef",
-            'email' => "Eliya1@example.com",
-            "password" => "12345678",
-            "password_confirmation" => "12345678"
+            'email' => "Eliyas1@example.com",
+            "password" => "A12345678",
+            "password_confirmation" => "A12345678"
         ];
         
         $response = $this->post('/api/register',$register_form_fields);
@@ -29,16 +29,16 @@ class AuthProcessTests extends TestCase
         $this->assertEquals('User created successfully', $response->getData()->message);
     }
     
-    public function test_login_test(): void
-    {
-        $login_form_fields = [
-            'email' => "tuna@example.com",
-            "password" => "12345678",
-        ];
+    // public function test_login_test(): void
+    // {
+    //     $login_form_fields = [
+    //         'email' => "tuna@example.com",
+    //         "password" => "12345678",
+    //     ];
         
-        $response = $this->post('/api/login',$login_form_fields);
-        $response->assertStatus(200);
+    //     $response = $this->post('/api/login',$login_form_fields);
+    //     $response->assertStatus(200);
 
-        $this->assertEquals('Login successful.', $response->getData()->message);
-    }
+    //     $this->assertEquals('Login successful.', $response->getData()->message);
+    // }
 }

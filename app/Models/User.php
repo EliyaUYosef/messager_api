@@ -61,7 +61,7 @@ class User extends Authenticatable
      */
     public static $login_form_rules = [
         "email" => "required|email|max:255|min:6",
-        "password" => "required|string|min:8|max:50"
+        "password" => "required|string|confirmed|min:8|max:50|regex:/[^\d]/"
     ];
 
     public static $validations_id_rules = [
