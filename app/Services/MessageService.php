@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Models\Message;
-use App\Models\User;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MessageService
 {
@@ -39,16 +40,15 @@ class MessageService
      * @param integer $reciver_id
      * @return array
      */
-    public function get_messages_from_specific_user(int $user_id,int $reciver_id) : array
+    public function get_messages_from_specific_user(int $user_id,int $reciver_id) : LengthAwarePaginator
     {
-        return User::find($user_id)
-                    ->sentMessages()
-                    ->where('reciver', $reciver_id)
-                    ->orWhere(function ($query) use ($user_id, $reciver_id) {
-                        $query->where('sender', $reciver_id)->where('reciver', $user_id);
-                    })
-                    ->orderBy('id', 'ASC')
-                    ->get();
+        return Message::where('sender',$user_id)
+                ->where('reciver', $reciver_id)
+                ->orWhere(function ($query) use ($user_id, $reciver_id) {
+                    $query->where('sender', $reciver_id)->where('reciver', $user_id);
+                })
+                ->orderBy('id', 'ASC')
+                ->paginate(6);
     }
 
     /**
@@ -58,7 +58,7 @@ class MessageService
      * @param integer $reciver_id
      * @return array
      */
-    public function get_unread_messages_from_specific_user(int $user_id,int $reciver_id) : array
+    public function get_unread_messages_from_specific_user(int $user_id,int $reciver_id) : LengthAwarePaginator
     {
         return Message::where(function ($query) use ($user_id, $reciver_id) {
                         $query->where('sender', $user_id)->where('reciver', $reciver_id);
@@ -67,7 +67,7 @@ class MessageService
                     })
                     ->where('recieved_flag', 0)
                     ->orderBy('id', 'ASC')
-                    ->get(); 
+                    ->paginate(6);
     }
 
     /**
@@ -91,7 +91,7 @@ class MessageService
     public function mark_as_read(int $message_id) : bool
     {
         return Message::where('id', $message_id)
-                    ->update(['recieved_flag' => now()]);;
+                    ->update(['recieved_flag' => 1]);;
     }
 
     /**
@@ -100,7 +100,7 @@ class MessageService
      * @param integer $message_id
      * @return Message
      */
-    public function get_message_by_id(int $message_id) : Message
+    public function get_message_by_id(int $message_id) : ?Message
     {
         return Message::find($message_id);
     }
@@ -113,11 +113,9 @@ class MessageService
      * @param integer $user_id
      * @return boolean
      */
-    public function check_if_receiver_exist(int $message_id, int $user_id) : bool 
+    public function check_if_receiver_exist(int $message_id, int $user_id) : ?Message 
     {
-        return User::find($user_id)->receivedMessages()
-                    ->where('id',$message_id)
-                    ->exist();
+        return Message::find($message_id);
     }
 
     // Validations rules functions - - - - - - - - - - -

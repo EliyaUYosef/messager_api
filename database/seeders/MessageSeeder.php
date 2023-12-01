@@ -20,6 +20,6 @@ class MessageSeeder extends Seeder
         ]);
 
         // Create multiple messages using factory
-        Message::factory(30)->create();
+        Message::factory(50)->create();
     }
 }

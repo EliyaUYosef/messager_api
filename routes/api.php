@@ -38,8 +38,8 @@ Route::group([
    Route::get("auth/logout", 
          [ApiController::class,'logout']);
   
-   Route::post("msg/insert_new_message", 
-         [ApiController::class,'insert_new_message']);
+   Route::post("msg/send_message", 
+         [ApiController::class,'send_message']);
 
    Route::post("msg/update_message_as_read", 
          [ApiController::class,'update_message_as_read']);

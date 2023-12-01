@@ -13,8 +13,8 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            'sender' => $this->faker->numberBetween(1, 10),
-            'reciver' => $this->faker->numberBetween(1, 10),
+            'sender' => $this->faker->numberBetween(8, 15),
+            'reciver' => $this->faker->numberBetween(8, 15),
             'message' => $this->faker->text(400),
             'subject' => $this->faker->sentence,
             'recieved_flag' => $this->faker->boolean, // Randomly generates 0 or 1

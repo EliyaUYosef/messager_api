@@ -9,6 +9,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use \Illuminate\Http\JsonResponse;
 
 /**
  * Main Api Controller - Http Terminal Requests
@@ -49,7 +50,7 @@ class ApiController extends Controller
      * @param Request $request (name, email, password, password_confirmation)
      * @return Response (HTTP-JSON)
      */
-    public function register(Request $request) : \Illuminate\Http\JsonResponse
+    public function register(Request $request) : JsonResponse
     {
         // Data validation
         $request->validate(
@@ -86,7 +87,7 @@ class ApiController extends Controller
      * @param Request $request (email, password)
      * @return Response (HTTP-JSON)
      */
-    public function login(Request $request) : \Illuminate\Http\JsonResponse
+    public function login(Request $request) : JsonResponse
     {
         // Data validation
         $request->validate(
@@ -129,7 +130,7 @@ class ApiController extends Controller
      * @param []
      * @return Response (HTTP-JSON) 
      */
-    public function profile() : \Illuminate\Http\JsonResponse
+    public function profile() : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -153,12 +154,11 @@ class ApiController extends Controller
      * Method : GET ()
      * Path : a[i/auth/logout
      * 
-     * 
      * @auth User
      * @param []
      * @return Response (HTTP-JSON)
      */
-    public function logout() : \Illuminate\Http\JsonResponse
+    public function logout() : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -177,7 +177,7 @@ class ApiController extends Controller
     /**
      * Insert New Message
      * Method : POST
-     * Path : api/msg/insert_new_message
+     * Path : api/msg/send_message
      * 
      * Desc : add new message to db.
      *        the connectng user is the writer
@@ -186,7 +186,7 @@ class ApiController extends Controller
      * @param Request $request (reciver, message, subject)
      * @return Response (HTTP_JSON)
      */
-    public function insert_new_message(Request $request) : \Illuminate\Http\JsonResponse
+    public function send_message(Request $request) : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -245,7 +245,7 @@ class ApiController extends Controller
      * @param Request $request ( reciver - user_id )
      * @return Response (HTTP_JSON)
      */
-    public function get_chat_with(Request $request) : \Illuminate\Http\JsonResponse
+    public function get_chat_with(Request $request) : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -254,10 +254,9 @@ class ApiController extends Controller
             ])->setStatusCode(401);
         }
         $user = Auth::user();
-
         // Data validation
         $request->validate($this->userService->user_id_validations()); // return 422 on error
-
+        
         // Fetch the user with whom the chat is happening
         $chat_with_user = $this->userService->get_user_by_id($request->user_id);
         if (!$chat_with_user) {
@@ -265,30 +264,21 @@ class ApiController extends Controller
                 "message" => "Chat partner not found"
             ])->setStatusCode(404);
         }
-
+        
         $chat_messages = $this->messageService
-            ->get_messages_from_specific_user($user['id'], $request->user_id) ?? [];
-
+                ->get_messages_from_specific_user($user['id'], $request->user_id) ?? [];
+                
         $count_messages = count($chat_messages);
-
-        if ($count_messages > 0) {
-            return response()->json([
-                "data" => [
-                    "messages" => $chat_messages,
-                    "messages_count" => $count_messages,
-                    "chat_with" => $chat_with_user
-                ],
-                "message" => "This the all messages."
-            ])->setStatusCode(200);
-        }
-
+        
         return response()->json([
             "data" => [
                 "messages" => $chat_messages,
                 "messages_count" => $count_messages,
+                "chat_with" => $chat_with_user
             ],
-            "message" => "No messages found with the specific user."
-        ])->setStatusCode(204);
+            "message" => $count_messages > 0 ? "This the all messages." : "No messages found with the specific user."
+        ])->setStatusCode(200);
+        
     }
 
     /**
@@ -302,7 +292,7 @@ class ApiController extends Controller
      * @param Request $request ( reciver - user_id )
      * @return Response (HTTP_JSON)
      */
-    public function get_unread_messages_from(Request $request) : \Illuminate\Http\JsonResponse
+    public function get_unread_messages_from(Request $request) : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -326,27 +316,16 @@ class ApiController extends Controller
         // Search for messages
         $messages_result = $this->messageService
             ->get_unread_messages_from_specific_user($user['id'], $request->user_id) ?? [];
-
         $count_messages = count($messages_result);
-
-        if ($count_messages > 0) {
-            return response()->json([
-                "data" => [
-                    "messages" => $messages_result,
-                    "messages_count" => $count_messages,
-                    "chat_with"=>$chat_with_user,
-                ],
-                "message" => "This the all messages."
-            ])->setStatusCode(200);
-        }
 
         return response()->json([
             "data" => [
                 "messages" => $messages_result,
-                "messages_count" => $count_messages
+                "messages_count" => $count_messages,
+                "chat_with"=>$chat_with_user,
             ],
-            "message" => "No unread messages found with the specific user."
-        ])->setStatusCode(204);
+            "message" => $count_messages > 0 ? "This the all messages." : "No unread messages found with the specific user."
+        ])->setStatusCode(200);
     }
 
     /**
@@ -360,7 +339,7 @@ class ApiController extends Controller
      * @param Request $request (message_id)
      * @return Response (HTTP_JSON)
      */
-    public function update_message_as_read(Request $request) : \Illuminate\Http\JsonResponse
+    public function update_message_as_read(Request $request) : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -369,7 +348,7 @@ class ApiController extends Controller
             ])->setStatusCode(401);
         }
         $user = Auth::user();
-
+        
         // Data validation
         $request->validate(
             $this->messageService->message_id_validations()
@@ -383,11 +362,11 @@ class ApiController extends Controller
                 "message" => "Message not found."
             ])->setStatusCode(404);
         }
-
+        
         // Check if the receiver exists
         $receiver_exist_result = $this->messageService
             ->check_if_receiver_exist($request->message_id, $user->id);
-
+        
         if (!$receiver_exist_result) {
             return response()->json([
                 "message" => "Receiver not found."
@@ -400,7 +379,7 @@ class ApiController extends Controller
         $message = $this->messageService
             ->get_message_by_id($request->message_id);
 
-        if ($update_status && $message) {
+        if ($update_status && $message->id) {
             return response()->json([
                 "data" => [
                     "message" => $message
@@ -425,7 +404,7 @@ class ApiController extends Controller
      * @param Request $request (message_id)
      * @return Response (HTTP_JSON)
      */
-    public function delete_message(Request $request) : \Illuminate\Http\JsonResponse
+    public function delete_message(Request $request) : JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
@@ -438,17 +417,19 @@ class ApiController extends Controller
         // Data validation
         $request->validate($this->messageService
             ->message_id_validations());
-
         $message_to_delete = $this->messageService
             ->get_message_by_id($request->message_id);
-
-        if (
-            !$message_to_delete ||
-            ($message_to_delete->sender !== $user->id &&
-                $message_to_delete->receiver !== $user->id)
-        ) {
+            
+        if ( !$message_to_delete ) {
             return response()->json([
-                "message" => "Message not found or you don't have permission to delete it.",
+                "message" => "Message not found.",
+            ])->setStatusCode(404);
+        }
+
+        if ( ($message_to_delete->sender !== $user->id &&
+                $message_to_delete->receiver !== $user->id)) {
+            return response()->json([
+                "message" => "You don't have permission to delete it.",
             ])->setStatusCode(404);
         }
 
