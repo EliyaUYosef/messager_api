@@ -1,0 +1,333 @@
+{
+	"info": {
+		"_postman_id": "22b8537a-82b3-4a3f-819f-c058df9edfbf",
+		"name": "Messanger - messager/",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "15524889"
+	},
+	"item": [
+		{
+			"name": "Auth - auth/",
+			"item": [
+				{
+					"name": "Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjc4NDI4MDM5OTZlYmQ2ZDM4YWMyMmEwMmQ0MjE4MzAxMTViYTc5MTA0NjAwNzgxMGZmNDIxN2Q4ZTFhYjkxYTdiOTIzOGJjNzVkZjFmMTkiLCJpYXQiOjE3MDEzNTczNDcuNTU3NzIzLCJuYmYiOjE3MDEzNTczNDcuNTU3NzI1LCJleHAiOjE3MzI5Nzk3NDcuNTU1NTEzLCJzdWIiOiIxMCIsInNjb3BlcyI6W119.oFFRzZpTR2WiG8WmD_kkdoIORTcAKzvYWu3qZczGPJTRtbhgmEfCeXM7bM4RwLNpt1sKwM-tMnRNm0NtxDQzAgvlVyEVvJPWhN1itly1yvjcCW-L9Qiak_XFIZA2XaPxCXv-LMsLj8BDJgMKBbSnt6ZHCyMHIbjorcZkptHdJz4s5sckQovYCHCjIBnzWH9QiN768OZ6LfsyGEU6j1Sgr-CrLokOkK_SQPa9V05fWmtt-CrdCmTNMMh6GF3hRmxAqUPEs_GC7TCbGkHy8T2WRD6yNZQqobWqQSAr0ysb18hECi6XCS8WeT9LBHaj4AbY1bfcYya7UoCXPpqD-s3cXpcpwHSvWDOjkuf3r73G7y4tkK0m1P3xwJxopTEWx3GYlgsyOD4_k8rZvAV3ZfuHr5i1GhdCmGZaws4wdH3kNShOX5pgoTj8lGrMUNKxqrdBAZoLJ3O8NYO3e__AjrXAIwzqIe6xFu-NrONbFvV3aOoSeh3w29i9utqLjgWWhD2xPOAzjuqsUa_36LvL6sGC_gk7HwWtF3Qwemgvf8NsDIAabVvC07nJ7MhXoNdxHfof0AqhE6z7fhroKpf7d8AbJ9DLbTHbuw5vMm9kTauVMciPFz1KHSICoAoaYG4WyAIDOEarBw_paU0_E_y2NjKpuv4l9RBDqW4i9FQVlIS4i4I",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "eliya.yosef@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": "http://localhost:8001/api/auth/profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTExZmRlNjM5YjBjZTEwODZlOTk1MWQyNWY2YmU4Mzk4YTMzYjUzYjVhYzA4YjA0YWJiMWIyZjhiMDQ5YjQ1YWRlMzEzMTZlODhkYTlmNjEiLCJpYXQiOjE3MDEzNTU5NTAuMjQ4NTEyLCJuYmYiOjE3MDEzNTU5NTAuMjQ4NTE1LCJleHAiOjE3MzI5NzgzNTAuMjQ2MTIzLCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.noS3ermduYoJCcLVaAOGIiZ-Fm4LKqzJH6_Z1RwYuNGe0XxKsphkzzEE_PI73cUrHeZXXzx-827jcW2S4YKs90bNIJAFOk4PK1FNUdV_PeH7q2jbUpVucpKheKrc1C_JQg6Iwx3zJKi-XRLhx9vndpuBhn8YJQovCGZ8Z-QbVmMoISjNpEsNL_vQ0CIRr__drZzj0GftEa6QkLmT5g_NRa2_2CHmMhhrchJoWAtxYzBNM90h--4d2srfcK0Iu3Grlzzd2zRIs0ziJWhWRR0NQEyGqcqwDi1_PrqaNM1gMv4eQMSHWSR9LWg97HWBiWgNC00Hysg5P8XwmpTt21ve4KdeXI62lHNVYqRIsdoz3p2kPVyhS7TSVKLjmjn8gM23IC6drw-swJC5Mk6v2-zSz98XpobViDyVxtnXxK5r0g4lZxSYILcWnavgq0A8aQkoHwuDDcF1Jat7nwNcFK2rstOspGYwW7Vv_I7yY57c-mMTCq0287VLTsry67z6oj6mKUnMpEXPSL8H7Ps1wfFKzg2aO6lho3xTFDuK4y2QbZv1B9RSq94hWiEXoYmLKdx8NNxufADttfu8Dg3R5_hL-D-9toV-IgygSoYnckgQrBMfv0osloJ10TQbVbEcbdBt-fFT6nvWzPX9GVOuV5j2Ll0atrzi-UZebeyxu5kXsH4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "eliya.yosef@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": "http://localhost:8001/api/auth/logout"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "avi@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:8001/api/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "aplication/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Reuven Cohen",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "reuven@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "A12345678",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "A12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:8001/api/auth/register"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Message - msg/",
+			"item": [
+				{
+					"name": "Write Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjc4NDI4MDM5OTZlYmQ2ZDM4YWMyMmEwMmQ0MjE4MzAxMTViYTc5MTA0NjAwNzgxMGZmNDIxN2Q4ZTFhYjkxYTdiOTIzOGJjNzVkZjFmMTkiLCJpYXQiOjE3MDEzNTczNDcuNTU3NzIzLCJuYmYiOjE3MDEzNTczNDcuNTU3NzI1LCJleHAiOjE3MzI5Nzk3NDcuNTU1NTEzLCJzdWIiOiIxMCIsInNjb3BlcyI6W119.oFFRzZpTR2WiG8WmD_kkdoIORTcAKzvYWu3qZczGPJTRtbhgmEfCeXM7bM4RwLNpt1sKwM-tMnRNm0NtxDQzAgvlVyEVvJPWhN1itly1yvjcCW-L9Qiak_XFIZA2XaPxCXv-LMsLj8BDJgMKBbSnt6ZHCyMHIbjorcZkptHdJz4s5sckQovYCHCjIBnzWH9QiN768OZ6LfsyGEU6j1Sgr-CrLokOkK_SQPa9V05fWmtt-CrdCmTNMMh6GF3hRmxAqUPEs_GC7TCbGkHy8T2WRD6yNZQqobWqQSAr0ysb18hECi6XCS8WeT9LBHaj4AbY1bfcYya7UoCXPpqD-s3cXpcpwHSvWDOjkuf3r73G7y4tkK0m1P3xwJxopTEWx3GYlgsyOD4_k8rZvAV3ZfuHr5i1GhdCmGZaws4wdH3kNShOX5pgoTj8lGrMUNKxqrdBAZoLJ3O8NYO3e__AjrXAIwzqIe6xFu-NrONbFvV3aOoSeh3w29i9utqLjgWWhD2xPOAzjuqsUa_36LvL6sGC_gk7HwWtF3Qwemgvf8NsDIAabVvC07nJ7MhXoNdxHfof0AqhE6z7fhroKpf7d8AbJ9DLbTHbuw5vMm9kTauVMciPFz1KHSICoAoaYG4WyAIDOEarBw_paU0_E_y2NjKpuv4l9RBDqW4i9FQVlIS4i4I",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "reciver",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "Me Too",
+									"type": "text"
+								},
+								{
+									"key": "subject",
+									"value": "Love Letter too",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:8001/api/msg/insert_new_message/"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGQwM2FiYmQ0ZjY5NWZiYzc3M2I2NTc5M2VhMmY0OGEzMDM4MTcwYmY1Yzc2ZTAwNzYxNzg2NGUzOTg3YWNiYTA3MTZmOTM3MjFmZTAyYTciLCJpYXQiOjE3MDE0NjE2NTUuNDE3MjEyLCJuYmYiOjE3MDE0NjE2NTUuNDE3MjIzLCJleHAiOjE3MzMwODQwNTUuMzY4ODQ3LCJzdWIiOiIxMiIsInNjb3BlcyI6W119.ecre4rbFoMCzIVQtuFpNkrrnK-DhDt39330ZHRFJ-Nz7o-1d9LRnYdtD54I2Zm6tdQocOgUx2VCzB8mo8QSIgW5XF4mGZMSx1Uuw-vM847Kp_qxRDkkSpwl3Zpc4p-e69khvf0hhnDpPf_0vEGMw-Hi9fWF4oDbQnex_VV3yJg2NIJvJoQGrIvylB8OidR30FcgSwuw8lOOAEx_fX57Dec4XV1iz1AbWFJbd07v8dln5LcGDERdZk4FyzYLOIj8RhEkfR-7HkqhKGD-_uYEfJDC3b2187XlHh0TRtyanCrb1HPtH15HjxW8uFK2vlmRWzXzZ8XnJVIvNIyRWYq3eU-mHGqRJHXrOFnOlP_y_47XepVR6RFhV-3vR5n1oiNDul5kuoOIUt-kxlMryQDvf8eJIUyol82S4lohL0G-s3Nk-52r0_cE68QpJ3uz9o-JQmHfy4TIVE87o4XMDxzf-IdfZd_yR3gR9SMHi_HsSAOvvNRydg5fywESFUAtr-_qGOB2qwYRgczWumbVf8fei3nOFsKzFc3OC26AxhOwjsgyC6goDHbSWMSqlbVHiGZFDOtuNxZ8x_W-CrgBKnkVGlOmRJbYcPbeYmuGJn641BzIaaVkRhyh7peqb7WinJXpokf2DxPr0HVVVifsIDDNycIwc5_1JLyWCRW2VSUsIMXU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"message_id\":94}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/api/msg/delete_message"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chat With",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGQwM2FiYmQ0ZjY5NWZiYzc3M2I2NTc5M2VhMmY0OGEzMDM4MTcwYmY1Yzc2ZTAwNzYxNzg2NGUzOTg3YWNiYTA3MTZmOTM3MjFmZTAyYTciLCJpYXQiOjE3MDE0NjE2NTUuNDE3MjEyLCJuYmYiOjE3MDE0NjE2NTUuNDE3MjIzLCJleHAiOjE3MzMwODQwNTUuMzY4ODQ3LCJzdWIiOiIxMiIsInNjb3BlcyI6W119.ecre4rbFoMCzIVQtuFpNkrrnK-DhDt39330ZHRFJ-Nz7o-1d9LRnYdtD54I2Zm6tdQocOgUx2VCzB8mo8QSIgW5XF4mGZMSx1Uuw-vM847Kp_qxRDkkSpwl3Zpc4p-e69khvf0hhnDpPf_0vEGMw-Hi9fWF4oDbQnex_VV3yJg2NIJvJoQGrIvylB8OidR30FcgSwuw8lOOAEx_fX57Dec4XV1iz1AbWFJbd07v8dln5LcGDERdZk4FyzYLOIj8RhEkfR-7HkqhKGD-_uYEfJDC3b2187XlHh0TRtyanCrb1HPtH15HjxW8uFK2vlmRWzXzZ8XnJVIvNIyRWYq3eU-mHGqRJHXrOFnOlP_y_47XepVR6RFhV-3vR5n1oiNDul5kuoOIUt-kxlMryQDvf8eJIUyol82S4lohL0G-s3Nk-52r0_cE68QpJ3uz9o-JQmHfy4TIVE87o4XMDxzf-IdfZd_yR3gR9SMHi_HsSAOvvNRydg5fywESFUAtr-_qGOB2qwYRgczWumbVf8fei3nOFsKzFc3OC26AxhOwjsgyC6goDHbSWMSqlbVHiGZFDOtuNxZ8x_W-CrgBKnkVGlOmRJbYcPbeYmuGJn641BzIaaVkRhyh7peqb7WinJXpokf2DxPr0HVVVifsIDDNycIwc5_1JLyWCRW2VSUsIMXU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user_id\":8}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/api/msg/get_chat_with"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Messages From",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGQwM2FiYmQ0ZjY5NWZiYzc3M2I2NTc5M2VhMmY0OGEzMDM4MTcwYmY1Yzc2ZTAwNzYxNzg2NGUzOTg3YWNiYTA3MTZmOTM3MjFmZTAyYTciLCJpYXQiOjE3MDE0NjE2NTUuNDE3MjEyLCJuYmYiOjE3MDE0NjE2NTUuNDE3MjIzLCJleHAiOjE3MzMwODQwNTUuMzY4ODQ3LCJzdWIiOiIxMiIsInNjb3BlcyI6W119.ecre4rbFoMCzIVQtuFpNkrrnK-DhDt39330ZHRFJ-Nz7o-1d9LRnYdtD54I2Zm6tdQocOgUx2VCzB8mo8QSIgW5XF4mGZMSx1Uuw-vM847Kp_qxRDkkSpwl3Zpc4p-e69khvf0hhnDpPf_0vEGMw-Hi9fWF4oDbQnex_VV3yJg2NIJvJoQGrIvylB8OidR30FcgSwuw8lOOAEx_fX57Dec4XV1iz1AbWFJbd07v8dln5LcGDERdZk4FyzYLOIj8RhEkfR-7HkqhKGD-_uYEfJDC3b2187XlHh0TRtyanCrb1HPtH15HjxW8uFK2vlmRWzXzZ8XnJVIvNIyRWYq3eU-mHGqRJHXrOFnOlP_y_47XepVR6RFhV-3vR5n1oiNDul5kuoOIUt-kxlMryQDvf8eJIUyol82S4lohL0G-s3Nk-52r0_cE68QpJ3uz9o-JQmHfy4TIVE87o4XMDxzf-IdfZd_yR3gR9SMHi_HsSAOvvNRydg5fywESFUAtr-_qGOB2qwYRgczWumbVf8fei3nOFsKzFc3OC26AxhOwjsgyC6goDHbSWMSqlbVHiGZFDOtuNxZ8x_W-CrgBKnkVGlOmRJbYcPbeYmuGJn641BzIaaVkRhyh7peqb7WinJXpokf2DxPr0HVVVifsIDDNycIwc5_1JLyWCRW2VSUsIMXU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user_id\":8}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/api/msg/get_unread_messages_from"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Message As Unread Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGQwM2FiYmQ0ZjY5NWZiYzc3M2I2NTc5M2VhMmY0OGEzMDM4MTcwYmY1Yzc2ZTAwNzYxNzg2NGUzOTg3YWNiYTA3MTZmOTM3MjFmZTAyYTciLCJpYXQiOjE3MDE0NjE2NTUuNDE3MjEyLCJuYmYiOjE3MDE0NjE2NTUuNDE3MjIzLCJleHAiOjE3MzMwODQwNTUuMzY4ODQ3LCJzdWIiOiIxMiIsInNjb3BlcyI6W119.ecre4rbFoMCzIVQtuFpNkrrnK-DhDt39330ZHRFJ-Nz7o-1d9LRnYdtD54I2Zm6tdQocOgUx2VCzB8mo8QSIgW5XF4mGZMSx1Uuw-vM847Kp_qxRDkkSpwl3Zpc4p-e69khvf0hhnDpPf_0vEGMw-Hi9fWF4oDbQnex_VV3yJg2NIJvJoQGrIvylB8OidR30FcgSwuw8lOOAEx_fX57Dec4XV1iz1AbWFJbd07v8dln5LcGDERdZk4FyzYLOIj8RhEkfR-7HkqhKGD-_uYEfJDC3b2187XlHh0TRtyanCrb1HPtH15HjxW8uFK2vlmRWzXzZ8XnJVIvNIyRWYq3eU-mHGqRJHXrOFnOlP_y_47XepVR6RFhV-3vR5n1oiNDul5kuoOIUt-kxlMryQDvf8eJIUyol82S4lohL0G-s3Nk-52r0_cE68QpJ3uz9o-JQmHfy4TIVE87o4XMDxzf-IdfZd_yR3gR9SMHi_HsSAOvvNRydg5fywESFUAtr-_qGOB2qwYRgczWumbVf8fei3nOFsKzFc3OC26AxhOwjsgyC6goDHbSWMSqlbVHiGZFDOtuNxZ8x_W-CrgBKnkVGlOmRJbYcPbeYmuGJn641BzIaaVkRhyh7peqb7WinJXpokf2DxPr0HVVVifsIDDNycIwc5_1JLyWCRW2VSUsIMXU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"message_id\":150}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8001/api/msg/update_message_as_read"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
