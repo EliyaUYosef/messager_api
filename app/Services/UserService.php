@@ -41,7 +41,7 @@ class UserService
         if (Auth::check()) {
             $user = Auth::user();
             
-            $token = $user->createToken("myToken")->accessToken;
+            $token = $user->createToken('app_token')->accessToken;
         }
         return $token;
     }
