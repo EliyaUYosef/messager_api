@@ -19,7 +19,7 @@ return new class extends Migration
            $table->integer('reciver');
            $table->text('message');
            $table->string('subject');
-           $table->date('recieved_flag')->nullable();
+           $table->integer('recieved_flag')->nullable();
            $table->timestamps();
        });
    }

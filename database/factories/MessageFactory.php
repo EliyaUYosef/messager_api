@@ -13,11 +13,11 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            'sender' => $this->faker->numberBetween(8, 15),
-            'reciver' => $this->faker->numberBetween(8, 15),
-            'message' => $this->faker->text(400),
-            'subject' => $this->faker->sentence,
-            'recieved_flag' => $this->faker->boolean, // Randomly generates 0 or 1
+            'sender' => $this->faker->numberBetween(1, 10),
+            'reciver' => $this->faker->numberBetween(1, 10),
+            'message' => $this->faker->text(200),
+            'subject' => $this->faker->text(45),
+            'recieved_flag' => $this->faker->numberBetween(0,1), // Randomly generates 0 or 1
         ];
     }
 }
