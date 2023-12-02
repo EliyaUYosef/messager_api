@@ -57,3 +57,5 @@ Route::group([
          [ApiController::class,'get_unread_messages_from']);
 
 });
+      
+Route::get("abc", [ApiController::class,'getLastConversations']);
