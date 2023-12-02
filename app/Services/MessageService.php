@@ -18,6 +18,7 @@ class MessageService
         60 => array('singular' => 'minute', 'plural' => 'minutes'),
         1 => array('singular' => 'second', 'plural' => 'seconds'),
     ); 
+
     /**
      * Return bool if message exist in DB
      *
@@ -124,7 +125,7 @@ class MessageService
      */
     public function check_if_receiver_exist(int $message_id, int $user_id): ?Message
     {
-        return Message::find($message_id);
+        return Message::find($message_id)->where('reciver',$user_id);
     }
 
     // Validations rules functions - - - - - - - - - - -
@@ -148,4 +149,54 @@ class MessageService
     {
         return Message::$validations_id_rules;
     }
+
+    /**
+     * Retrieve the last 20 users ids conversations 
+     *   involving a specific user.
+     *
+     * @param integer $user_id
+     * @return array
+     */
+    public function last_friend_on_messages_history(int $user_id) : array
+    {
+        $lastConversations = Message::select('sender', 'reciver', 'created_at')
+                ->where('sender', $user_id)
+                ->orWhere('reciver', $user_id)
+                ->groupBy('sender', 'reciver', 'created_at')
+                ->orderByDesc('created_at')
+                ->paginate(20);
+
+        return $lastConversations->map(function ($val) use ($user_id) {
+            return $user_id === $val->sender ? $val->reciver : null;
+        })->filter()->toArray();
+    }
+
+    /**
+     * Convert the message creation time to a human-readable string.
+     *
+     * @param \App\Models\Message $cell
+     * @return \App\Models\Message|null
+     */
+    public function time_to_string(Message $cell): ?Message
+    {
+        $currentTime = time();
+        $timestamp = strtotime($cell->created_at);
+        $timeDifference = $currentTime - $timestamp;
+
+        foreach ($this->intervals_time as $seconds => $label) {
+            $numberOfUnits = $timeDifference / $seconds;
+
+            if ($numberOfUnits >= 1) {
+                $rounded = round($numberOfUnits);
+                $unit = ($rounded == 1) ? $label['singular'] : $label['plural'];
+                $cell->creation_time_string = $rounded . ' ' . $unit . ' ago';
+                return $cell;
+            }
+        }
+
+        $cell->creation_time_string = 'just now';
+        return $cell;
+    }
+
+
 }

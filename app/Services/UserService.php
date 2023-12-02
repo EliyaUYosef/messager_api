@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 class UserService
 {
@@ -53,7 +54,12 @@ class UserService
      */
     public function get_user_by_id(int $user_id) : User 
     {
-        return User::find($user_id);
+        $user =  User::find($user_id);
+        if($user->last_action_time === null) {
+            $user->last_action_time = $user->created_at;
+        }
+
+        return $user;
     }
 
     /**
@@ -84,5 +90,16 @@ class UserService
     public function user_id_validations() : array 
     {
         return User::$validations_id_rules;
+    }
+
+    /**
+    * Get a collection of users based on their IDs.
+    *
+    * @param array $user_ids
+    * @return \Illuminate\Database\Eloquent\Collection
+    */
+    public function get_users_list(array $user_ids) : Collection
+    {
+        return User::whereIn('id', $user_ids)->get();
     }
 }

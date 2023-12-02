@@ -50,7 +50,7 @@ class ApiController extends Controller
      * 
      * @auth User
      * @param Request $request (name, email, password, password_confirmation)
-     * @return Response (HTTP-JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request): JsonResponse
     {
@@ -58,7 +58,7 @@ class ApiController extends Controller
         $request->validate(
             $this->userService->register_validations_rule()
         ); // Return HTTP status code 422 on failure
-        
+
         // Author model
         $new_user = $this->userService->create_user([
             "name" => $request->name,
@@ -87,7 +87,7 @@ class ApiController extends Controller
      *
      * @auth User
      * @param Request $request (email, password)
-     * @return Response (HTTP-JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request): JsonResponse
     {
@@ -130,7 +130,7 @@ class ApiController extends Controller
      * 
      * @auth User
      * @param []
-     * @return Response (HTTP-JSON) 
+    * @return \Illuminate\Http\JsonResponse
      */
     public function profile(): JsonResponse
     {
@@ -158,7 +158,7 @@ class ApiController extends Controller
      * 
      * @auth User
      * @param []
-     * @return Response (HTTP-JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function logout(): JsonResponse
     {
@@ -186,7 +186,7 @@ class ApiController extends Controller
      *
      * @auth User
      * @param Request $request (reciver, message, subject)
-     * @return Response (HTTP_JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function send_message(Request $request): JsonResponse
     {
@@ -245,7 +245,7 @@ class ApiController extends Controller
      *
      * @auth User
      * @param Request $request ( reciver - user_id )
-     * @return Response (HTTP_JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function get_chat_with(Request $request): JsonResponse
     {
@@ -266,9 +266,14 @@ class ApiController extends Controller
                 "message" => "Chat partner not found"
             ])->setStatusCode(404);
         }
+        
 
         $chat_messages = $this->messageService
             ->get_messages_from_specific_user($user['id'], $request->user_id) ?? [];
+
+        $time_to_string_callback = [$this->messageService, 'time_to_string'];
+        $message_with_time = array_map($time_to_string_callback, $chat_messages->items());
+        $chat_messages = $message_with_time;
 
         $count_messages = count($chat_messages);
 
@@ -291,7 +296,7 @@ class ApiController extends Controller
      * 
      * @auth User
      * @param Request $request ( reciver - user_id )
-     * @return Response (HTTP_JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function get_unread_messages_from(Request $request): JsonResponse
     {
@@ -318,6 +323,9 @@ class ApiController extends Controller
         $messages_result = $this->messageService
             ->get_unread_messages_from_specific_user($user['id'], $request->user_id) ?? [];
 
+        $time_to_string_callback = [$this->messageService, 'time_to_string'];
+        $message_with_time = array_map($time_to_string_callback, $messages_result->items());
+        $chat_messages = $message_with_time;
         
         $count_messages = count($messages_result);
 
@@ -340,7 +348,7 @@ class ApiController extends Controller
      * 
      * @auth User
      * @param Request $request (message_id)
-     * @return Response (HTTP_JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function update_message_as_read(Request $request): JsonResponse
     {
@@ -405,7 +413,7 @@ class ApiController extends Controller
      *
      * @auth User
      * @param Request $request (message_id)
-     * @return Response (HTTP_JSON)
+    * @return \Illuminate\Http\JsonResponse
      */
     public function delete_message(Request $request): JsonResponse
     {
@@ -455,5 +463,49 @@ class ApiController extends Controller
                 "message" => "Failed to delete the message.",
             ])->setStatusCode(500);
         }
+    }
+
+    /**
+    * Get the last 20 conversations involving a specific user.
+    *
+    * @auth User
+    * @return \Illuminate\Http\JsonResponse
+    */
+    public function get_last_chats_peoples() : JsonResponse
+    {
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to retrieve conversations."
+            ])->setStatusCode(401);
+        }
+        $user = Auth::user();
+        $user_id = $user->id;
+        
+        // Fetch last conversations
+        $last_conversations = $this->messageService->last_friend_on_messages_history($user_id);
+        if (empty($last_conversations)) {
+            return response()->json([
+                'message' => 'You do not have any chats.',
+            ])->setStatusCode(404);
+        }
+        
+        // Fetch user details based on last conversations    
+        $users_list = $this->userService->get_users_list($last_conversations) ?? [];
+        
+        // Validate if users are retrieved
+        if (empty($users_list)) {
+            return response()->json([
+                'message' => 'No users found for the last conversations.',
+            ])->setStatusCode(404);
+        }
+
+        return response()->json([
+            'data' => [
+                'users' => $users_list, 
+                "users_count" => count($users_list)
+            ],
+            'message' => 'Retrieve the last 20 conversations involving a specific user.',
+        ])->setStatusCode(200);
     }
 }
