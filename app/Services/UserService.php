@@ -50,11 +50,11 @@ class UserService
      * Find user by user_id
      *
      * @param integer $user_id
-     * @return User|null
+     * @return User|array
      */
-    public function get_user_by_id(int $user_id) 
+    public function get_user_by_id(int $user_id) : ?User
     {
-        return User::find($user_id) ?? [];
+        return User::find($user_id) ?? null;
     }
 
     /**

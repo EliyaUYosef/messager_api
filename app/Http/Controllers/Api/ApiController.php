@@ -206,7 +206,7 @@ class ApiController extends Controller
     
         $reciver_user = $this->userService
             ->get_user_by_id($request->reciver);
-        if (is_null($reciver_user) || !$reciver_user) {
+        if (!$reciver_user) {
             return response()->json([
                 "message" => "Message reciver is not recognized."
             ])->setStatusCode(404);

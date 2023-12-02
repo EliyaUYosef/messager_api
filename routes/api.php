@@ -29,7 +29,6 @@ Route::post("auth/register", [ApiController::class,'register']);
 // Protected Group Routes
 Route::group([
    "middleware" => ["auth:api", "update_user_last_action"]
-   // "middleware" => ["auth:api"]
 ],function(){
    Route::get("auth/profile", [ApiController::class,'profile']);
 
