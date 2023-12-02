@@ -54,15 +54,7 @@ class UserService
      */
     public function get_user_by_id(int $user_id) : ?User 
     {
-        $user =  User::find($user_id);
-        if ($user === null){
-            return null;
-        }
-        elseif($user->last_action_time === null) {
-            $user->last_action_time = $user->created_at;
-        }
-
-        return $user;
+        return User::find($user_id);
     }
 
     /**
