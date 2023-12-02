@@ -54,7 +54,6 @@ class UserService
      */
     public function get_user_by_id(int $user_id) : ?User 
     {
-        die("try");
         return User::find($user_id);
     }
 
