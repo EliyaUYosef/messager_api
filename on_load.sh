@@ -12,7 +12,7 @@ heroku run php artisan route:clear
 
 # Git operations
 git add .
-git commit -m "Deployment: $(date +'%Y-%m-%d %H:%M:%S')"
+git commit -m "Auto deployment: $(date +'%Y-%m-%d %H:%M:%S')"
 git push
 git push heroku main
 
