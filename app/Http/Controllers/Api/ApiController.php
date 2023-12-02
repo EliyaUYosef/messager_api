@@ -203,10 +203,10 @@ class ApiController extends Controller
             $this->messageService
                 ->message_validations_rules()
         );
-        die("here ! ");
+    
         $reciver_user = $this->userService
             ->get_user_by_id($request->reciver);
-        if (!$reciver_user) {
+        if (is_null($reciver_user) || !$reciver_user) {
             return response()->json([
                 "message" => "Message reciver is not recognized."
             ])->setStatusCode(404);
