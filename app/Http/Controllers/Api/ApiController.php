@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Http\JsonResponse;
-use App\Models\Message;
-use App\Models\User;
 
 /**
  * Main Api Controller - Http Terminal Requests
@@ -206,7 +204,7 @@ class ApiController extends Controller
     
         $reciver_user = $this->userService
             ->get_user_by_id($request->reciver);
-        if (!$reciver_user) {
+        if ($reciver_user === null) {
             return response()->json([
                 "message" => "Message reciver is not recognized."
             ])->setStatusCode(404);
