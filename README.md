@@ -1,4 +1,4 @@
-# Messenger API Documentation
+# <span style="color:#00FF00">Messenger API Documentation</span>
 Welcome to the Messenger API documentation. This API provides    functionality for handling messages between users.
 
 ## Authentication
@@ -6,12 +6,11 @@ To access protected routes, include the following header in your request:
 ###### Authorization: Bearer <TOKEN>
 
 
-## API Endpoints : 
+# <span style="color:#FF0000">API Endpoints : </span>
 ## Auth - /auth/ 
 
 ### 1. Profile
-#### Method: 
-GET
+#### Method: <span style="color:#0000FF">GET</span>
 #### Description: 
 Retrieve the current user's profile information.
 #### URL: 
@@ -21,7 +20,7 @@ Retrieve the current user's profile information.
 #### Authorization: Bearer <TOKEN>
 
 ### 2. Logout
-#### Method: GET
+#### Method: <span style="color:#0000FF">GET</span>
 #### Description: Logout the current user.
 #### URL: /api/auth/logout
 #### Headers:
@@ -29,7 +28,7 @@ Retrieve the current user's profile information.
 #### Authorization: Bearer <TOKEN>
 
 ### 3. Login
-#### Method: POST
+#### Method: <span style="color:#0000FF">POST</span>
 #### Description: Authenticate a user and generate an access token.
 #### URL: /api/auth/login
 #### Headers:
@@ -57,7 +56,7 @@ Retrieve the current user's profile information.
     }
 
 ### 4. Register
-#### Method: POST
+#### Method: <span style="color:#0000FF">POST</span>
 #### Description: Create a new user account.
 #### URL: /api/auth/register
 #### Headers:
@@ -97,7 +96,7 @@ Retrieve the current user's profile information.
 ## Message - /msg/
 
 ### 1. Write Message
-#### Method: POST
+#### Method: <span style="color:#0000FF">POST</span>
 #### Description: Send a new message to another user.
 #### URL: /api/msg/send_message
 #### Headers:
@@ -132,7 +131,7 @@ Retrieve the current user's profile information.
 
 ### 2. Delete Message
 #### Description: Delete a specific message.
-#### Method: POST
+#### Method: <span style="color:#0000FF">POST</span>
 #### URL: /api/msg/delete_message
 #### Headers:
     Accept: application/json
@@ -151,7 +150,7 @@ Retrieve the current user's profile information.
     }
 
 ### 3. Get Chat With
-#### Method: GET
+#### Method: <span style="color:#0000FF">GET</span>
 #### Description: Fetch all messages exchanged with a particular user.
 #### URL: /api/msg/get_chat_with
 #### * this method allows pagination (for implement : add "page" on body)
@@ -173,7 +172,7 @@ Retrieve the current user's profile information.
     }
 
 ### 4. Get Unread Messages From
-#### Method: GET
+#### Method: <span style="color:#0000FF">GET</span>
 #### Description: Retrieve all unread messages sent by a specific user.
 #### URL: /api/msg/get_unread_messages_from
 #### * this method allows pagination (for implement : add "page" on body)
@@ -195,7 +194,7 @@ Retrieve the current user's profile information.
     }
     
 ### 5. Mark Message As Read
-#### Method: POST
+#### Method: <span style="color:#0000FF">POST</span>
 #### Description: Mark a message as unread.
 #### URL: /api/msg/update_message_as_read
 #### Headers:
@@ -214,7 +213,7 @@ Retrieve the current user's profile information.
     }
 
 ### 6. Get Last Conversations
-#### Method: GET
+#### Method: <span style="color:#0000FF">GET</span>
 #### Description: Retrieve the latest conversations with all users.
 #### URL: /api/msg/get_last_conversations
 #### * this method allows pagination (for implement : add "page" on body)
