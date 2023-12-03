@@ -245,7 +245,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGYzOTA0NzZkZTQ3ZGU1YTI3OTdmNjdlZDVjMzg1NTgwOGJiYWVhMDlkNTMwZDU0YzJkYTIzNjA1ZWM1NGJlNmQ1MGU4NTA1NGVjYWFkMDgiLCJpYXQiOjE3MDE2MTI5MjUuOTExODc4LCJuYmYiOjE3MDE2MTI5MjUuOTExODgsImV4cCI6MTczMzIzNTMyNS44ODc3NzMsInN1YiI6IjUiLCJzY29wZXMiOltdfQ.qLHEQUprTqQevbHRTXDq8k47I90zWVip9an0S8ao9I3IFQCowZcu3jRR1HAdGK_Ww_d9qffK425Mk8mUtfkGRPkgiYXBO1KcCDwyogVJ4Rx6qoHEsrYZTmRBAFxbEEAGzWvOApV1VmTa1TvRM_zgMdrh67JxXueJHIQ30POTdaCz7rOv7E6XvRMGHaAPzNqe1X1_gzrnpk8cH9i9OZ3Twjbmwf_Rw5PEjCi_iqpTxStyfpeHPSwD23steiyNnMJSgZ-tpyzScoOv-yfNfibbEyvzxBwwkwBC7eBF48UkiWPE7KnmD_oburp6D25XlWHmgXacSZcMuV94_OUV7xsdQj4RbDjiPrLqXiNLPqRWBW6F8GozP-C93PXNHuiYnwbbip__ikdgEQ24nY_2JaVZhUnkJ0iUTweGdCKZwvCcoporAg2tJGUPzodF6dqsT31ABYN8Fnkf817UHmfiK52gXXb1FRZQzU--g7Y5mclnTnMIWj3ph7Pb3A4WiNh0Q0V3GR0FsILvDVDUw__qNpSewaGPJDrFxNFp3IxWaRqc3BSuUmVzrdInN5oPoJPeAKT_49Ew2iqG-FdvWpi2AKUPidcJkA3oGDCoDXz-UYxfBdxo-BKObWIVkCtjjQW8un8CIp5RQSunkO6vybp-TtEOB4svQmAySGjYlf0wsT_seoI",
+								"value": "Bearer <TOKEN>",
 								"type": "text"
 							}
 						],
@@ -267,6 +267,11 @@
 					"request": {
 						"method": "POST",
 						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
 							{
 								"key": "Authorization",
 								"value": "Bearer <TOKEN>",
@@ -295,13 +300,13 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Bearer <TOKEN>",
+								"key": "Accept",
+								"value": "application/json",
 								"type": "text"
 							},
 							{
-								"key": "Accept",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer <TOKEN>",
 								"type": "text"
 							}
 						],

@@ -1,66 +1,223 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Messenger API Documentation
+#### Welcome to the Messenger API documentation. This API provides    functionality for handling messages between users.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Authentication
+#### To access protected routes, include the following header in your request:
+##### Authorization: Bearer <TOKEN>
 
-## About Laravel
+## API Endpoints : 
+#### Auth - /auth/ 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 1. Profile
+#### Method: GET
+#### Description: Retrieve the current user's profile information.
+#### URL: /api/auth/profile
+#### Headers:
+    Accept: application/json
+#### Authorization: Bearer <TOKEN>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 2. Logout
+#### Method: GET
+#### Description: Logout the current user.
+#### URL: /api/auth/logout
+#### Headers:
+#### Accept: application/json
+#### Authorization: Bearer <TOKEN>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 3. Login
+#### Method: POST
+#### Description: Authenticate a user and generate an access token.
+#### URL: /api/auth/login
+#### Headers:
+    Accept: application/json
+#### Body: (json)
+    {
+        "email": "your_email@example.com",
+        "password": "your_password"
+    }
+#### Validations: 
+    {
+        "email" => [
+            "this field is required",
+            "this string must be on email address structure",
+            "this string length must be have maximum 255 charachters",
+            "this string length must be have minimum 6 charachters",
+        ],
+        "password" => [
+            "this field is required",
+            "this field must be with type string",
+            "this string length must be have maximum 50 charachters",
+            "this string length must be have minimum 8 charachters",
+            "must contain at least one letter",
+        ]
+    }
 
-## Learning Laravel
+### 4. Register
+#### Method: POST
+#### Description: Create a new user account.
+#### URL: /api/auth/register
+#### Headers:
+    Accept: application/json
+#### Body: (json)
+    {
+        "name": "Your Name",
+        "email": "your_email@example.com",
+        "password": "your_password",
+        "password_confirmation": "your_password"
+    }
+#### Validations: 
+    {
+        "name" => [
+            "this field is required",
+            "this field must be with type string",
+            "this string length must be have maximum 255 charachters",
+            "this string length must be have minimum 2 charachters",
+        ],
+        "email" => [
+            "this field is required",
+            "this string must be on email address structure",
+            "this field must be with uniqe value",
+            "this string length must be have maximum 255 charachters",
+            "this string length must be have minimum 6 charachters",
+        ],
+        "password" => [
+            "this field is required",
+            "this field must be with type string",
+            "this string length must be have maximum 50 charachters",
+            "this string length must be have minimum 8 charachters",
+            "must contain at least one letter",
+            "this form fields must contain field with name : \n password_confirmation with the same content of this field"
+        ]
+    }
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Message - /msg/
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 1. Write Message
+#### Method: POST
+#### Description: Send a new message to another user.
+#### URL: /api/msg/send_message
+#### Headers:
+    Accept: application/json
+    Authorization: Bearer <TOKEN>
+#### Body: (json)
+    {
+        "reciver": 2,
+        "message": "Your Message",
+        "subject": "Message Subject"
+    }
+#### Validations: 
+    {
+        "reciver" => [
+            "this field is required",
+            "this field must be with type integer(number)",
+            "this field value must be gretter then 1",
+        ],
+        "message" => [
+            "this field is required",
+            "this field must be with type string",
+            "this string length must be have maximum 255 charachters",
+            "this string length must be have minimum 3 charachters",
+        ],
+        "subject" => [
+            "this field is required",
+            "this field must be with type string",
+            "this string length must be have maximum 255 charachters",
+            "this string length must be have minimum 3 charachters",
+        ]
+    }
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Delete Message
+#### Description: Delete a specific message.
+#### Method: POST
+#### URL: /api/msg/delete_message
+#### Headers:
+    Accept: application/json
+    Authorization: Bearer <TOKEN>
+#### Body: (json)
+    {
+        "message_id": 1
+    }
+#### Validations: 
+    {
+        "message_id" => [
+            "this field is required",
+            "this field must be with type integer(number)",
+            "this field value must be gretter then 1",
+        ],
+    }
 
-## Laravel Sponsors
+### 3. Get Chat With
+#### Method: GET
+#### Description: Fetch all messages exchanged with a particular user.
+#### URL: /api/msg/get_chat_with
+#### * this method allows pagination (for implement : add "page" on body)
+#### Headers:
+    Accept: application/json
+    Authorization: Bearer <TOKEN>
+#### Body: (json)
+    {
+        "user_id": 1
+        // Optional: "page": 2
+    }
+#### Validations: 
+    {
+        "user_id" => [
+            "this field is required",
+            "this field must be with type integer(number)",
+            "this field value must be gretter then 1",
+        ],
+    }
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 4. Get Unread Messages From
+#### Method: GET
+#### Description: Retrieve all unread messages sent by a specific user.
+#### URL: /api/msg/get_unread_messages_from
+#### * this method allows pagination (for implement : add "page" on body)
+#### Headers:
+    Accept: application/json
+    Authorization: Bearer <TOKEN>
+#### Body: (json)
+    {
+        "user_id": 4
+        // Optional: "page": 2
+    }
+#### Validations: 
+    {
+        "user_id" => [
+            "this field is required",
+            "this field must be with type integer(number)",
+            "this field value must be gretter then 1",
+        ],
+    }
+    
+### 5. Mark Message As Read
+#### Method: POST
+#### Description: Mark a message as unread.
+#### URL: /api/msg/update_message_as_read
+#### Headers:
+    Authorization: Bearer <TOKEN>
+#### Body: (json)
+    {
+        "message_id": 4
+    }
+    Validations: 
+    {
+        "message_id" => [
+            "this field is required",
+            "this field must be with type integer(number)",
+            "this field value must be gretter then 1",
+        ],
+    }
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 6. Get Last Conversations
+#### Method: GET
+#### Description: Retrieve the latest conversations with all users.
+#### URL: /api/msg/get_last_conversations
+#### * this method allows pagination (for implement : add "page" on body)
+#### Headers:
+    Accept: application/json
+    Authorization: Bearer <TOKEN>
+#### Body: (json)
+    {
+        // Optional: "page": 2
+    }
