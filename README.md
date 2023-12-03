@@ -1,17 +1,21 @@
 # Messenger API Documentation
-#### Welcome to the Messenger API documentation. This API provides    functionality for handling messages between users.
+Welcome to the Messenger API documentation. This API provides    functionality for handling messages between users.
 
 ## Authentication
-#### To access protected routes, include the following header in your request:
-##### Authorization: Bearer <TOKEN>
+To access protected routes, include the following header in your request:
+###### Authorization: Bearer <TOKEN>
+
 
 ## API Endpoints : 
-#### Auth - /auth/ 
+## Auth - /auth/ 
 
 ### 1. Profile
-#### Method: GET
-#### Description: Retrieve the current user's profile information.
-#### URL: /api/auth/profile
+#### Method: 
+GET
+#### Description: 
+Retrieve the current user's profile information.
+#### URL: 
+/api/auth/profile
 #### Headers:
     Accept: application/json
 #### Authorization: Bearer <TOKEN>
