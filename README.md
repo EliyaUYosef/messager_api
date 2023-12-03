@@ -19,37 +19,39 @@ Include a comprehensive visual representation of the project's database structur
 ## Auth - /auth/ 
 
 ### 1. Profile
-#### Method: <span style="color:#0000FF">GET</span>
+##### Method: <span style="color:#0000FF">GET</span>
 #### Description: 
 Retrieve the current user's profile information.
-#### URL: 
+##### URL: 
 /api/auth/profile
-#### Headers:
+###### Headers:
     Accept: application/json
-#### Authorization: Bearer <TOKEN>
+    Authorization: Bearer <TOKEN>
 
 ### 2. Logout
-#### Method: <span style="color:#0000FF">GET</span>
-#### Description: Logout the current user.
-#### URL: /api/auth/logout
-#### Headers:
-#### Accept: application/json
-#### Authorization: Bearer <TOKEN>
+##### Method: <span style="color:#0000FF">GET</span>
+#### Description: 
+    Logout the current user.
+##### URL: 
+    /api/auth/logout
+###### Headers:
+    Accept: application/json
+    Authorization: Bearer <TOKEN>
 
 ### 3. Login
-#### Method: <span style="color:#0000FF">POST</span>
+##### Method: <span style="color:#0000FF">POST</span>
 #### Description: 
-Authenticate a user and generate an access token.
-#### URL: 
-/api/auth/login
-#### Headers:
+    Authenticate a user and generate an access token.
+##### URL: 
+    /api/auth/login
+###### Headers:
     Accept: application/json
-#### Body: (json)
+##### Body: (json)
     {
         "email": "your_email@example.com",
         "password": "your_password"
     }
-#### Validations: (Rules)
+##### Validations: (Rules)
     {
         "email" => [
             "this field is required",
@@ -67,21 +69,21 @@ Authenticate a user and generate an access token.
     }
 
 ### 4. Register
-#### Method: <span style="color:#0000FF">POST</span>
+##### Method: <span style="color:#0000FF">POST</span>
 #### Description: 
 Create a new user account.
-#### URL: 
+##### URL: 
 /api/auth/register
-#### Headers:
+###### Headers:
     Accept: application/json
-#### Body: (json)
+##### Body: (json)
     {
         "name": "Your Name",
         "email": "your_email@example.com",
         "password": "your_password",
         "password_confirmation": "your_password"
     }
-#### Validations: (Rules)
+##### Validations: (Rules)
     {
         "name" => [
             "this field is required",
@@ -109,21 +111,21 @@ Create a new user account.
 ## Message - /msg/
 
 ### 1. Write Message
-#### Method: <span style="color:#0000FF">POST</span>
+##### Method: <span style="color:#0000FF">POST</span>
 #### Description: 
 Send a new message to another user.
-#### URL: 
+##### URL: 
 /api/msg/send_message
-#### Headers:
+###### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
-#### Body: (json)
+##### Body: (json)
     {
         "reciver": 2,
         "message": "Your Message",
         "subject": "Message Subject"
     }
-#### Validations: (Rules)
+##### Validations: (Rules)
     {
         "reciver" => [
             "this field is required",
@@ -145,19 +147,19 @@ Send a new message to another user.
     }
 
 ### 2. Delete Message
-#### Method: <span style="color:#0000FF">POST</span>
+##### Method: <span style="color:#0000FF">POST</span>
 #### Description: 
 Delete a specific message.
-#### URL: 
+##### URL: 
 /api/msg/delete_message
-#### Headers:
+###### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
-#### Body: (json)
+##### Body: (json)
     {
         "message_id": 1
     }
-#### Validations: (Rules)
+##### Validations: (Rules)
     {
         "message_id" => [
             "this field is required",
@@ -167,21 +169,21 @@ Delete a specific message.
     }
 
 ### 3. Get Chat With
-#### Method: <span style="color:#0000FF">GET</span>
+##### Method: <span style="color:#0000FF">GET</span>
 #### Description: 
 Fetch all messages exchanged with a particular user.
-#### URL: 
+##### URL: 
 /api/msg/get_chat_with
 #### * this method allows pagination (for implement : add "page" on body)
-#### Headers:
+###### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
-#### Body: (json)
+##### Body: (json)
     {
         "user_id": 1
         // Optional: "page": 2
     }
-#### Validations: (Rules)
+##### Validations: (Rules)
     {
         "user_id" => [
             "this field is required",
@@ -191,21 +193,21 @@ Fetch all messages exchanged with a particular user.
     }
 
 ### 4. Get Unread Messages From
-#### Method: <span style="color:#0000FF">GET</span>
+##### Method: <span style="color:#0000FF">GET</span>
 #### Description: 
 Retrieve all unread messages sent by a specific user.
-#### URL: 
+##### URL: 
 /api/msg/get_unread_messages_from
 #### * this method allows pagination (for implement : add "page" on body)
-#### Headers:
+###### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
-#### Body: (json)
+##### Body: (json)
     {
         "user_id": 4
         // Optional: "page": 2
     }
-#### Validations: (Rules)
+##### Validations: (Rules)
     {
         "user_id" => [
             "this field is required",
@@ -215,14 +217,14 @@ Retrieve all unread messages sent by a specific user.
     }
     
 ### 5. Mark Message As Read
-#### Method: <span style="color:#0000FF">POST</span>
+##### Method: <span style="color:#0000FF">POST</span>
 #### Description: 
 Mark a message as unread.
-#### URL: 
+##### URL: 
 /api/msg/update_message_as_read
-#### Headers:
+###### Headers:
     Authorization: Bearer <TOKEN>
-#### Body: (json)
+##### Body: (json)
     {
         "message_id": 4
     }
@@ -236,20 +238,18 @@ Mark a message as unread.
     }
 
 ### 6. Get Last Conversations
-#### Method: <span style="color:#0000FF">GET</span>
+##### Method: <span style="color:#0000FF">GET</span>
 #### Description: 
 Retrieve the latest conversations with all users.
-#### URL: 
+##### URL: 
 /api/msg/get_last_conversations
 #### * this method allows pagination (for implement : add "page" on body)
-#### Headers:
+###### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
-#### Body: (json)
+##### Body: (json)
     {
         // Optional: "page": 2
     }
-
-
 
 Eliya : This project has been a tough nut to crack, but it was incredibly fun. Navigating through the complexities challenged us at every turn, and it required some serious problem-solving skills. Despite the difficulties, the satisfaction of overcoming each hurdle made the entire journey enjoyable. It was hard work, but the fun we had along the way made it all worth it.
