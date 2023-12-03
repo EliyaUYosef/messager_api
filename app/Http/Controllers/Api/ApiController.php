@@ -426,7 +426,7 @@ class ApiController extends Controller
         }
 
         if (($message_to_delete->sender !== $user->id &&
-            $message_to_delete->receiver !== $user->id)) {
+            $message_to_delete->reciver !== $user->id)) {
             return response()->json([
                 "message" => "You don't have permission to delete it.",
             ])->setStatusCode(404);
