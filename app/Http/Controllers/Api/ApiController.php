@@ -201,21 +201,14 @@ class ApiController extends Controller
             $this->messageService
                 ->message_validations_rules()
         );
-        try {
-            $reciver_user = $this->userService
-                    ->get_user_by_id($request->reciver);
-            if (!$reciver_user) {
-                return response()->json([
-                    "message" => "Message reciver is not recognized."
-                ])->setStatusCode(404);
-            }
-        }
-        catch(\Exception $e) {
-            return response()->json([
-                "message" => $e->getMessage(),
-            ])->setStatusCode(404);
-        }
         
+        $reciver_user = $this->userService
+                ->get_user_by_id($request->reciver);
+        if (!$reciver_user) {
+            return response()->json([
+                "message" => "Message reciver is not recognized."
+            ])->setStatusCode(404);
+        }    
 
         $message_creation_result = $this->messageService->create_message([
             'sender' =>  $sender->id,
