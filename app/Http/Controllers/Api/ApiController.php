@@ -313,7 +313,7 @@ class ApiController extends Controller
 
         // Search for messages
         $messages_result = $this->messageService
-            ->get_unread_messages_from_specific_user($user['id'], $request->user_id) ?? [];
+            ->get_unread_messages_from_specific_user($user->id, $request->user_id) ?? [];
 
         $count_messages = count($messages_result);
 
