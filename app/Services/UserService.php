@@ -98,7 +98,7 @@ class UserService
     * Get a collection of users based on their IDs.
     *
     * @param array $user_ids
-    * @return \Illuminate\Database\Eloquent\Collection
+    * @return Collection|null
     */
     public function get_users_list(array $user_ids) : ?Collection
     {
