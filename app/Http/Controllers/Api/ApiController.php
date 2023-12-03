@@ -213,7 +213,7 @@ class ApiController extends Controller
         catch(\Exception $e) {
             return response()->json([
                 "message" => $e->getMessage(),
-            ])->setStatusCode(500);
+            ])->setStatusCode(404);
         }
         
 
