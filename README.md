@@ -1,5 +1,5 @@
 # <span style="color:#00FF00">Messenger API Documentation</span>
-Welcome to the Messenger API documentation. This API provides    functionality for handling messages between users.
+Welcome to the Messenger API documentation. This API provides functionality for handling messages between users.
 
 <!-- [Visit the Messenger API](https://messager-api-c2cd41880be6.herokuapp.com) -->
 
@@ -10,6 +10,10 @@ Welcome to the Messenger API documentation. This API provides    functionality f
 To access protected routes, include the following header in your request:
 ###### Authorization: Bearer <TOKEN>
 
+### About Database
+Include a comprehensive visual representation of the project's database structure by referring to the attached image showcasing the two main tables, along with their respective attributes. This illustration provides a clear overview of the relational schema and enhances understanding of the data model implemented in the Messenger API project.
+
+![Alt text](image-1.png)
 
 # <span style="color:#FF0000">API Endpoints : </span>
 ## Auth - /auth/ 
@@ -245,11 +249,6 @@ Retrieve the latest conversations with all users.
     {
         // Optional: "page": 2
     }
-
-
-
-
-
 
 
 
