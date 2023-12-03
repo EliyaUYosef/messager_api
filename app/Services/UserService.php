@@ -100,7 +100,7 @@ class UserService
     * @param array $user_ids
     * @return \Illuminate\Database\Eloquent\Collection
     */
-    public function get_users_list(array $user_ids) : Collection
+    public function get_users_list(array $user_ids) : ?Collection
     {
         return User::whereIn('id', $user_ids)->get();
     }

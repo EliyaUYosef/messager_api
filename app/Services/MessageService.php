@@ -116,11 +116,13 @@ class MessageService
      *
      * @param integer $message_id
      * @param integer $user_id
-     * @return boolean
+     * @return Message|null
      */
     public function check_if_receiver_exist(int $message_id, int $user_id): ?Message
     {
-        return Message::find($message_id)->where('reciver',$user_id);
+        return Message::where('id', $message_id)
+                    ->where('reciver', $user_id)
+                    ->first();
     }
 
     // Validations rules functions - - - - - - - - - - -
