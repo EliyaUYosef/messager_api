@@ -10,16 +10,23 @@ class MessageSeeder extends Seeder
 {
     public function run() : void
     {
-        // Create a single message
-        Message::create([
-            'sender' => User::inRandomOrder()->first()->id,
-            'reciver' => User::inRandomOrder()->first()->id,
-            'message' => 'Example message content.',
-            'subject' => 'Example Subject',
-            'recieved_flag' => 1, // Randomly generates 0 or 1
-        ]);
+        // Get a random sender and receiver
+        $sender = User::inRandomOrder()->first();
+        $receiver = User::inRandomOrder()->first();
+
+        // Check if both sender and receiver exist
+        if ($sender && $receiver) {
+            // Create a single message
+            Message::create([
+                'sender' => $sender->id,
+                'receiver' => $receiver->id,
+                'message' => 'Example message content.',
+                'subject' => 'Example Subject',
+                'received_flag' => 1, // Randomly generates 0 or 1
+            ]);
+        }
 
         // Create multiple messages using factory
-        Message::factory(50)->create();
+        Message::factory(500)->create();
     }
 }
