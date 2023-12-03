@@ -54,7 +54,14 @@ class UserService
      */
     public function get_user_by_id(int $user_id) : ?User
     {
-        return User::find($user_id);
+        $user = User::find($user_id);
+
+        if ($user) {
+            return $user;
+        }
+    
+        // Handle the case where the user is not found
+        return null;
     }
 
     /**

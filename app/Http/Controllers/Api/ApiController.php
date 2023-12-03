@@ -201,14 +201,21 @@ class ApiController extends Controller
             $this->messageService
                 ->message_validations_rules()
         );
-    
-        $reciver_user = $this->userService
-            ->get_user_by_id($request->reciver);
-        if ($reciver_user === null) {
-            return response()->json([
-                "message" => "Message reciver is not recognized."
-            ])->setStatusCode(404);
+        try {
+            $reciver_user = $this->userService
+                    ->get_user_by_id($request->reciver);
+            if (!$reciver_user) {
+                return response()->json([
+                    "message" => "Message reciver is not recognized."
+                ])->setStatusCode(404);
+            }
         }
+        catch(\Exception $e) {
+            return response()->json([
+                "message" => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
+        
 
         $message_creation_result = $this->messageService->create_message([
             'sender' =>  $sender->id,
@@ -264,13 +271,8 @@ class ApiController extends Controller
             ])->setStatusCode(404);
         }
         
-
         $chat_messages = $this->messageService
             ->get_messages_from_specific_user($user['id'], $request->user_id) ?? [];
-
-        $time_to_string_callback = [$this->messageService, 'time_to_string'];
-        $message_with_time = array_map($time_to_string_callback, $chat_messages->items());
-        $chat_messages = $message_with_time;
 
         $count_messages = count($chat_messages);
 
@@ -320,10 +322,6 @@ class ApiController extends Controller
         $messages_result = $this->messageService
             ->get_unread_messages_from_specific_user($user['id'], $request->user_id) ?? [];
 
-        $time_to_string_callback = [$this->messageService, 'time_to_string'];
-        $message_with_time = array_map($time_to_string_callback, $messages_result->items());
-        $chat_messages = $message_with_time;
-        
         $count_messages = count($messages_result);
 
         return response()->json([

@@ -21,8 +21,7 @@ class Message extends Model
     ];
 
     public static $validations_rules = [
-        // "sender" => "required|integer|min:1", // we get this from passport
-        "reciver" => "required|integer",
+        "reciver" => "required|integer|min:1",
         "message" => "required|string|max:20000",
         "subject" => "required|string|max:255|min:3",
     ];

@@ -8,17 +8,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class MessageService
 {
-    // Define time intervals in seconds
-    private $intervals_time = array(
-        31536000 => array('singular' => 'year', 'plural' => 'years'),
-        2592000 => array('singular' => 'month', 'plural' => 'months'),
-        604800 => array('singular' => 'week', 'plural' => 'weeks'),
-        86400 => array('singular' => 'day', 'plural' => 'days'),
-        3600 => array('singular' => 'hour', 'plural' => 'hours'),
-        60 => array('singular' => 'minute', 'plural' => 'minutes'),
-        1 => array('singular' => 'second', 'plural' => 'seconds'),
-    ); 
-
     /**
      * Return bool if message exist in DB
      *
@@ -112,7 +101,13 @@ class MessageService
      */
     public function get_message_by_id(int $message_id): ?Message
     {
-        return Message::find($message_id);
+        $message = Message::find($message_id);
+
+        if ($message) {
+            return $message;
+        }
+
+        return null;
     }
 
     /**
@@ -170,33 +165,4 @@ class MessageService
             return $user_id === $val->sender ? $val->reciver : null;
         })->filter()->toArray();
     }
-
-    /**
-     * Convert the message creation time to a human-readable string.
-     *
-     * @param \App\Models\Message $cell
-     * @return \App\Models\Message|null
-     */
-    public function time_to_string(Message $cell): ?Message
-    {
-        $currentTime = time();
-        $timestamp = strtotime($cell->created_at);
-        $timeDifference = $currentTime - $timestamp;
-
-        foreach ($this->intervals_time as $seconds => $label) {
-            $numberOfUnits = $timeDifference / $seconds;
-
-            if ($numberOfUnits >= 1) {
-                $rounded = round($numberOfUnits);
-                $unit = ($rounded == 1) ? $label['singular'] : $label['plural'];
-                $cell->creation_time_string = $rounded . ' ' . $unit . ' ago';
-                return $cell;
-            }
-        }
-
-        $cell->creation_time_string = 'just now';
-        return $cell;
-    }
-
-
 }
