@@ -9,6 +9,7 @@ Welcome to the Messenger API documentation. This API provides functionality for 
 ## Authentication
 To access protected routes, include the following header in your request:
 ###### Authorization: Bearer <TOKEN>
+* This token will reach you on Login endpoint response.
 
 ### About Database
 Include a comprehensive visual representation of the project's database structure by referring to the attached image showcasing the two main tables, along with their respective attributes. This illustration provides a clear overview of the relational schema and enhances understanding of the data model implemented in the Messenger API project.
