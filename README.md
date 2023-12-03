@@ -3,10 +3,9 @@ Welcome to the Messenger API documentation. This API provides    functionality f
 
 <!-- [Visit the Messenger API](https://messager-api-c2cd41880be6.herokuapp.com) -->
 
-[Messenger API][messenger-api-url]
+## API Url :
+[https://messager-api-c2cd41880be6.herokuapp.com](https://messager-api-c2cd41880be6.herokuapp.com)
 
-[messenger-api-url]: https://messager-api-c2cd41880be6.herokuapp.com
-[Visit the Messenger API](https://messager-api-c2cd41880be6.herokuapp.com)
 
 ## Authentication
 To access protected routes, include the following header in your request:
