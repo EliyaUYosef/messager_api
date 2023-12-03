@@ -45,7 +45,7 @@ Authenticate a user and generate an access token.
         "email": "your_email@example.com",
         "password": "your_password"
     }
-#### Validations: 
+#### Validations: (Rules)
     {
         "email" => [
             "this field is required",
@@ -77,7 +77,7 @@ Create a new user account.
         "password": "your_password",
         "password_confirmation": "your_password"
     }
-#### Validations: 
+#### Validations: (Rules)
     {
         "name" => [
             "this field is required",
@@ -119,7 +119,7 @@ Send a new message to another user.
         "message": "Your Message",
         "subject": "Message Subject"
     }
-#### Validations: 
+#### Validations: (Rules)
     {
         "reciver" => [
             "this field is required",
@@ -153,7 +153,7 @@ Delete a specific message.
     {
         "message_id": 1
     }
-#### Validations: 
+#### Validations: (Rules)
     {
         "message_id" => [
             "this field is required",
@@ -177,7 +177,7 @@ Fetch all messages exchanged with a particular user.
         "user_id": 1
         // Optional: "page": 2
     }
-#### Validations: 
+#### Validations: (Rules)
     {
         "user_id" => [
             "this field is required",
@@ -201,7 +201,7 @@ Retrieve all unread messages sent by a specific user.
         "user_id": 4
         // Optional: "page": 2
     }
-#### Validations: 
+#### Validations: (Rules)
     {
         "user_id" => [
             "this field is required",
@@ -222,7 +222,7 @@ Mark a message as unread.
     {
         "message_id": 4
     }
-    Validations: 
+    Validations: (Rules)
     {
         "message_id" => [
             "this field is required",
