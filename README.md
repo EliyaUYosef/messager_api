@@ -1,6 +1,12 @@
 # <span style="color:#00FF00">Messenger API Documentation</span>
 Welcome to the Messenger API documentation. This API provides    functionality for handling messages between users.
 
+<!-- [Visit the Messenger API](https://messager-api-c2cd41880be6.herokuapp.com) -->
+
+[Messenger API][messenger-api-url]
+
+[messenger-api-url]: https://messager-api-c2cd41880be6.herokuapp.com
+
 ## Authentication
 To access protected routes, include the following header in your request:
 ###### Authorization: Bearer <TOKEN>
@@ -29,8 +35,10 @@ Retrieve the current user's profile information.
 
 ### 3. Login
 #### Method: <span style="color:#0000FF">POST</span>
-#### Description: Authenticate a user and generate an access token.
-#### URL: /api/auth/login
+#### Description: 
+Authenticate a user and generate an access token.
+#### URL: 
+/api/auth/login
 #### Headers:
     Accept: application/json
 #### Body: (json)
@@ -57,8 +65,10 @@ Retrieve the current user's profile information.
 
 ### 4. Register
 #### Method: <span style="color:#0000FF">POST</span>
-#### Description: Create a new user account.
-#### URL: /api/auth/register
+#### Description: 
+Create a new user account.
+#### URL: 
+/api/auth/register
 #### Headers:
     Accept: application/json
 #### Body: (json)
@@ -97,8 +107,10 @@ Retrieve the current user's profile information.
 
 ### 1. Write Message
 #### Method: <span style="color:#0000FF">POST</span>
-#### Description: Send a new message to another user.
-#### URL: /api/msg/send_message
+#### Description: 
+Send a new message to another user.
+#### URL: 
+/api/msg/send_message
 #### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
@@ -130,9 +142,11 @@ Retrieve the current user's profile information.
     }
 
 ### 2. Delete Message
-#### Description: Delete a specific message.
 #### Method: <span style="color:#0000FF">POST</span>
-#### URL: /api/msg/delete_message
+#### Description: 
+Delete a specific message.
+#### URL: 
+/api/msg/delete_message
 #### Headers:
     Accept: application/json
     Authorization: Bearer <TOKEN>
@@ -151,8 +165,10 @@ Retrieve the current user's profile information.
 
 ### 3. Get Chat With
 #### Method: <span style="color:#0000FF">GET</span>
-#### Description: Fetch all messages exchanged with a particular user.
-#### URL: /api/msg/get_chat_with
+#### Description: 
+Fetch all messages exchanged with a particular user.
+#### URL: 
+/api/msg/get_chat_with
 #### * this method allows pagination (for implement : add "page" on body)
 #### Headers:
     Accept: application/json
@@ -173,8 +189,10 @@ Retrieve the current user's profile information.
 
 ### 4. Get Unread Messages From
 #### Method: <span style="color:#0000FF">GET</span>
-#### Description: Retrieve all unread messages sent by a specific user.
-#### URL: /api/msg/get_unread_messages_from
+#### Description: 
+Retrieve all unread messages sent by a specific user.
+#### URL: 
+/api/msg/get_unread_messages_from
 #### * this method allows pagination (for implement : add "page" on body)
 #### Headers:
     Accept: application/json
@@ -195,8 +213,10 @@ Retrieve the current user's profile information.
     
 ### 5. Mark Message As Read
 #### Method: <span style="color:#0000FF">POST</span>
-#### Description: Mark a message as unread.
-#### URL: /api/msg/update_message_as_read
+#### Description: 
+Mark a message as unread.
+#### URL: 
+/api/msg/update_message_as_read
 #### Headers:
     Authorization: Bearer <TOKEN>
 #### Body: (json)
@@ -214,8 +234,10 @@ Retrieve the current user's profile information.
 
 ### 6. Get Last Conversations
 #### Method: <span style="color:#0000FF">GET</span>
-#### Description: Retrieve the latest conversations with all users.
-#### URL: /api/msg/get_last_conversations
+#### Description: 
+Retrieve the latest conversations with all users.
+#### URL: 
+/api/msg/get_last_conversations
 #### * this method allows pagination (for implement : add "page" on body)
 #### Headers:
     Accept: application/json
@@ -224,3 +246,12 @@ Retrieve the current user's profile information.
     {
         // Optional: "page": 2
     }
+
+
+
+
+
+
+
+
+Eliya : This project has been a tough nut to crack, but it was incredibly fun. Navigating through the complexities challenged us at every turn, and it required some serious problem-solving skills. Despite the difficulties, the satisfaction of overcoming each hurdle made the entire journey enjoyable. It was hard work, but the fun we had along the way made it all worth it.
