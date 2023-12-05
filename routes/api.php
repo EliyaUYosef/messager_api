@@ -43,9 +43,9 @@ Route::group([
          
 // -----------------------------------
 
-   Route::get("msg/get_chat_with", [ApiController::class,'get_chat_with']);
+   Route::post("msg/get_chat_with", [ApiController::class,'get_chat_with']);
 
-   Route::get("msg/get_unread_messages_from", [ApiController::class,'get_unread_messages_from']);
+   Route::post("msg/get_unread_messages_from", [ApiController::class,'get_unread_messages_from']);
    Route::get("msg/get_last_convesations", [ApiController::class,'get_last_chats_peoples']);
 
 });

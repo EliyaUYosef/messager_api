@@ -120,7 +120,7 @@ class ApiController extends Controller
 
     /**
      * Profile Api
-     * Method : GET ()
+     * Method : POST ()
      * Path : api/auth/profile
      * 
      * Desc : get all user info data from db
@@ -235,7 +235,7 @@ class ApiController extends Controller
 
     /**
      * Get Chat With
-     * Metthod : GET
+     * Metthod : POST
      * Path : api/msg/get_chat_with
      * 
      * Desc : get all messages from specific user
