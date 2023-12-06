@@ -20,15 +20,20 @@ use App\Http\Controllers\Api\ApiController;
 
 Route::get('test',fn() => phpinfo());
 
-// Open Routes
-Route::post("auth/login", [ApiController::class,'login']);
+Route::group([
+   "middleware" => ["cors"]
+],function() {
+   // Open Routes
+   Route::post("auth/login", [ApiController::class,'login']);
 
-Route::post("auth/register", [ApiController::class,'register']);
+   Route::post("auth/register", [ApiController::class,'register']);
+});
+
 
 
 // Protected Group Routes
 Route::group([
-   "middleware" => ["auth:api", "update_user_last_action","cors"]
+   "middleware" => ["auth:api", "update_user_last_action"]
 ],function(){
    Route::get("auth/profile", [ApiController::class,'profile']);
 
