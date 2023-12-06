@@ -46,7 +46,7 @@ class MessageService
             ->orWhere(function ($query) use ($user_id, $reciver_id) {
                 $query->where('sender', $reciver_id)->where('reciver', $user_id);
             })
-            ->orderBy('id', 'ASC')
+            ->orderBy('id', 'DESC')
             ->paginate(6);
     }
 
