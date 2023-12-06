@@ -47,7 +47,7 @@ class MessageService
                 $query->where('sender', $reciver_id)->where('reciver', $user_id);
             })
             ->orderBy('id', 'DESC')
-            ->paginate(6);
+            ->paginate(12);
     }
 
     /**
@@ -66,7 +66,7 @@ class MessageService
         })
             ->where('recieved_flag', 0)
             ->orderBy('id', 'ASC')
-            ->paginate(6);
+            ->paginate(12);
     }
 
     /**
