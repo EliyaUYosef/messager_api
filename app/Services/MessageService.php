@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Message;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -48,6 +49,52 @@ class MessageService
             })
             ->orderBy('id', 'DESC')
             ->paginate(12);
+    }
+    
+    /**
+    * Get chat messages with ids smaller than message_id
+    *
+    * @param int $user_id
+    * @param int $reciver_id
+    * @param int $message_id
+    * @return Collection
+    */
+    public function get_messages_smaller_than_id(int $user_id, int $reciver_id, int $message_id): Collection
+    {
+        return Message::where('sender', $user_id)
+            ->where('reciver', $reciver_id)
+            ->where('id', '<', $message_id)
+            ->orWhere(function ($query) use ($user_id, $reciver_id, $message_id) {
+                $query->where('sender', $reciver_id)
+                    ->where('reciver', $user_id)
+                    ->where('id', '<', $message_id);
+            })
+            ->orderBy('id', 'DESC')
+            ->take(12) 
+            ->get();
+    }
+    
+    /**
+    * Get chat messages with ids smaller than message_id
+    *
+    * @param int $user_id
+    * @param int $receiver_id
+    * @param int $message_id
+    * @return Collection
+    */
+    public function get_messages_bigger_than_id(int $user_id, int $reciver_id, int $message_id): Collection
+    {
+        return Message::where('sender', $user_id)
+            ->where('reciver', $reciver_id)
+            ->where('id', '>', $message_id)
+            ->orWhere(function ($query) use ($user_id, $reciver_id, $message_id) {
+                $query->where('sender', $reciver_id)
+                    ->where('reciver', $user_id)
+                    ->where('id', '>', $message_id);
+            })
+            ->orderBy('id', 'DESC')
+            ->take(12) 
+            ->get();
     }
 
     /**

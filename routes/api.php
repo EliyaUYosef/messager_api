@@ -48,7 +48,10 @@ Route::group([
          
 // -----------------------------------
 
-   Route::post("msg/get_chat_with", [ApiController::class,'get_chat_with']);
+   // GetChatWith_Versions : 
+      Route::post("msg/get_chat_with_first", [ApiController::class,'get_chat_with_first']);
+      Route::post("msg/get_chat_with_backword", [ApiController::class,'get_chat_with_backword']);
+      Route::post("msg/get_chat_with_forword", [ApiController::class,'get_chat_with_forword']);
 
    Route::post("msg/get_unread_messages_from", [ApiController::class,'get_unread_messages_from']);
    Route::get("msg/get_last_convesations", [ApiController::class,'get_last_chats_peoples']);

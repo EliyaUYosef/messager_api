@@ -12,17 +12,17 @@ class MessageSeeder extends Seeder
     {
         // Get a random sender and receiver
         $sender = User::inRandomOrder()->first();
-        $receiver = User::inRandomOrder()->first();
+        $reciver = User::inRandomOrder()->first();
 
         // Check if both sender and receiver exist
-        if ($sender && $receiver) {
+        if ($sender && $reciver) {
             // Create a single message
             Message::create([
                 'sender' => $sender->id,
-                'receiver' => $receiver->id,
+                'reciver' => $reciver->id,
                 'message' => 'Example message content.',
                 'subject' => 'Example Subject',
-                'received_flag' => 1, // Randomly generates 0 or 1
+                'recieved_flag' => 1, // Randomly generates 0 or 1
             ]);
         }
 

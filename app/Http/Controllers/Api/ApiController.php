@@ -278,6 +278,106 @@ class ApiController extends Controller
             "message" => $count_messages > 0 ? "This the all messages." : "No messages found with the specific user."
         ])->setStatusCode(200);
     }
+    
+    /**
+     * Get Chat With
+     * Metthod : POST
+     * Path : api/msg/get_chat_with_backword
+     * 
+     * Desc : get all messages from specific user
+     *
+     * @auth User
+     * @param Request $request ( reciver - user_id )
+    * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_chat_with_backword(Request $request): JsonResponse
+    {
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to get messages."
+            ])->setStatusCode(401);
+        }
+        $user = Auth::user();
+        // Data validation
+        $request->validate(
+            array_merge(
+                $this->userService->user_id_validations(),
+                $this->messageService->message_id_validations())
+        ); // return 422 on error
+
+        // Fetch the user with whom the chat is happening
+        $chat_with_user = $this->userService->get_user_by_id($request->user_id);
+        if (!$chat_with_user) {
+            return response()->json([
+                "message" => "Chat partner not found"
+            ])->setStatusCode(404);
+        }
+        
+        $chat_messages = $this->messageService
+            ->get_messages_smaller_than_id($user['id'], $request->user_id,$request->message_id) ?? [];
+
+        $count_messages = count($chat_messages);
+
+        return response()->json([
+            "data" => [
+                "messages" => $chat_messages,
+                "messages_count" => $count_messages,
+                "chat_with" => $chat_with_user
+            ],
+            "message" => $count_messages > 0 ? "This the all messages." : "No messages found with the specific user."
+        ])->setStatusCode(200);
+    }
+
+    /**
+     * Get Chat With
+     * Metthod : POST
+     * Path : api/msg/get_chat_with_forword
+     * 
+     * Desc : get all messages from specific user
+     *
+     * @auth User
+     * @param Request $request ( reciver - user_id, message_id )
+    * @return \Illuminate\Http\JsonResponse
+     */
+    public function get_chat_with_forword(Request $request): JsonResponse
+    {
+        // Authentication check
+        if (!Auth::check()) {
+            return response()->json([
+                "message" => "You must be logged in to get messages."
+            ])->setStatusCode(401);
+        }
+        $user = Auth::user();
+        // Data validation
+        $request->validate(
+            array_merge(
+                $this->userService->user_id_validations(),
+                $this->messageService->message_id_validations())
+        ); // return 422 on error
+
+        // Fetch the user with whom the chat is happening
+        $chat_with_user = $this->userService->get_user_by_id($request->user_id);
+        if (!$chat_with_user) {
+            return response()->json([
+                "message" => "Chat partner not found"
+            ])->setStatusCode(404);
+        }
+        
+        $chat_messages = $this->messageService
+            ->get_messages_bigger_than_id($user['id'], $request->user_id,$request->message_id) ?? [];
+
+        $count_messages = count($chat_messages);
+
+        return response()->json([
+            "data" => [
+                "messages" => $chat_messages,
+                "messages_count" => $count_messages,
+                "chat_with" => $chat_with_user
+            ],
+            "message" => $count_messages > 0 ? "This the all messages." : "No messages found with the specific user."
+        ])->setStatusCode(200);
+    }
 
     /**
      * Get Unread Messages From
