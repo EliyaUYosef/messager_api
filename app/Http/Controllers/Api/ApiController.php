@@ -236,7 +236,7 @@ class ApiController extends Controller
     /**
      * Get Chat With
      * Metthod : POST
-     * Path : api/msg/get_chat_with
+     * Path : api/msg/get_chat_with_first
      * 
      * Desc : get all messages from specific user
      *
@@ -244,7 +244,7 @@ class ApiController extends Controller
      * @param Request $request ( reciver - user_id )
     * @return \Illuminate\Http\JsonResponse
      */
-    public function get_chat_with(Request $request): JsonResponse
+    public function get_chat_with_first(Request $request): JsonResponse
     {
         // Authentication check
         if (!Auth::check()) {
