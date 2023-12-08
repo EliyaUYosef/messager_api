@@ -6,6 +6,7 @@ use App\Models\Message;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection as SupportCollection;
 
 class MessageService
 {
@@ -34,21 +35,21 @@ class MessageService
     }
 
     /**
-     * Get chat messages
-     *
-     * @param integer $user_id
-     * @param integer $reciver_id
-     * @return array
-     */
-    public function get_messages_from_specific_user(int $user_id, int $reciver_id): LengthAwarePaginator
+ * Get chat messages
+ *
+ * @param integer $user_id
+ * @param integer $reciver_id
+ * @return \Illuminate\Database\Eloquent\Collection
+ */
+    public function get_messages_from_specific_user(int $user_id, int $reciver_id):\Illuminate\Database\Eloquent\Collection
     {
         return Message::where('sender', $user_id)
-            ->where('reciver', $reciver_id)
-            ->orWhere(function ($query) use ($user_id, $reciver_id) {
-                $query->where('sender', $reciver_id)->where('reciver', $user_id);
-            })
-            ->orderBy('id', 'DESC')
-            ->paginate(12);
+        ->where('reciver', $reciver_id)
+        ->orWhere(function ($query) use ($user_id, $reciver_id) {
+            $query->where('sender', $reciver_id)->where('reciver', $user_id);
+        })
+        ->orderBy('id', 'DESC')
+        ->get(); // Use get() instead of paginate()
     }
     
     /**
